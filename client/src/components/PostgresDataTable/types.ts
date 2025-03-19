@@ -1,4 +1,4 @@
-import { DataTableColumnType, DataTableRowType } from '@surface.dev/ui';
+import { DataTableColumnType, DataTableRowType } from '@surface.dev/core';
 
 export type PostgresDataTableColumnType = DataTableColumnType & {
   type: string;

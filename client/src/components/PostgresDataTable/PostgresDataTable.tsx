@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo } from 'react';
-import { DataTable } from '@surface.dev/ui';
+import { DataTable } from '@surface.dev/core';
 import { PostgresColumnName } from '../PostgresColumnName';
 import { PostgresColumnValue } from '../PostgresColumnValue';
 import {
