@@ -1,4 +1,4 @@
-import { PostgresDataTableColumnType } from '../../../types';
+import { PostgresDataTableColumnType } from '../PostgresDataTable';
 
 export type PostgresColumnNameProps = {
   column: PostgresDataTableColumnType;

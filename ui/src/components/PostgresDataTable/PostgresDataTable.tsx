@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo } from 'react';
-import { DataTable } from '@surface.dev/core';
+import { DataTable } from '@surface.dev/ui';
 import { PostgresColumnName } from '../PostgresColumnName';
 import { PostgresColumnValue } from '../PostgresColumnValue';
 import {
@@ -7,7 +7,7 @@ import {
   PostgresDataTableRowType,
   PostgresDataTableHeaderCellType,
   PostgresDataTableDataCellType,
-} from '../../../types';
+} from './types';
 
 export type PostgresDataTableProps =
   // Option #1: Given a query, columns & rows populate based on query results.

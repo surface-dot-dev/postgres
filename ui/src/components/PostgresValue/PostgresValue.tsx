@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { getResolvedDataType, dataTypes as dt } from '../../../utils/dataTypes';
+import * as dt from '@/utils/dataTypes';
 
 export type PostgresValueProps = {
   type: string;
@@ -10,7 +10,7 @@ export type PostgresValueProps = {
 const ctx = (type: string) => `"${type}" value`;
 
 export const PostgresValue = ({ type, children, ...props }: PostgresValueProps) => {
-  const resolvedType = getResolvedDataType(type);
+  const resolvedType = dt.getResolvedDataType(type);
   const context = props.context || ctx(type);
 
   switch (resolvedType) {
