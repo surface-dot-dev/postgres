@@ -1,1 +1,1 @@
-# Postgres Components
+# MCP
