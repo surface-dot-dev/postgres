@@ -4,8 +4,6 @@ import { fromResourceUri } from '@/utils/fmt';
 import readTableResource from './table/read';
 // import readViewResource from './view/read';
 
-export const resources = [ResourceType.Table, ResourceType.View];
-
 export async function readResource(uri: string): Promise<Resource> {
   const { schema, resourceName, resourceType } = fromResourceUri(uri);
 
