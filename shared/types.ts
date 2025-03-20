@@ -13,7 +13,7 @@ export type DatabaseRecord = Dict;
 export type Resource = {
   uri: string;
   handle: string;
-  mimeType: string;
+  mimeType?: string;
   name?: string;
   description?: string;
   text?: string;
@@ -27,6 +27,10 @@ export enum ResourceType {
 // ============================
 //  Tool Types
 // ============================
+
+export enum ToolName {
+  Select = "select",
+}
 
 export type SelectToolInput = {
   query: string;

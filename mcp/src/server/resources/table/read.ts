@@ -1,4 +1,3 @@
-import { Resource } from '@shared/types';
 import { toHandle } from '@/utils/fmt';
 
 /*
@@ -9,13 +8,8 @@ foreign keys
 indexes
 unique constraints
 */
-async function readTableResource(uri: string, schema: string, name: string): Promise<Resource> {
-  return {
-    uri,
-    handle: toHandle(schema, name),
-    mimeType: 'application/json',
-    text: '',
-  };
+async function readTableResource(uri: string, schema: string, name: string): Promise<string> {
+  return '';
 }
 
 export default readTableResource;

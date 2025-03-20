@@ -1,6 +1,6 @@
 import { Resource, ResourceType } from '@shared/types';
 import config from '@/config';
-import select from '@/server/tools/select';
+import select from '@/server/tools/select/call';
 import * as sql from '@/data/sql/statements';
 import { TableType } from '@/data/sql/types';
 import { toResourceUri, toHandle } from '@/utils/fmt';
@@ -17,10 +17,12 @@ type CommentedTable = Table & {
 async function listTableResources(): Promise<Resource[]> {
   // List all *basic* tables in the exposed schemas.
   const query = sql.listTablesInSchemas(config.SCHEMAS, [TableType.Table]);
-  const tables = (await select(query)) as Table[];
+  const tables = (await select({ query })) as Table[];
 
   // Get the comments for each table.
-  const commentedTables = (await select(sql.getTableComments(tables))) as CommentedTable[];
+  const commentedTables = (await select({
+    query: sql.getTableComments(tables),
+  })) as CommentedTable[];
   const commentsByTablePath = new Map<string, string>();
   for (const commentedTable of commentedTables) {
     commentsByTablePath.set(
@@ -48,7 +50,6 @@ const formatAsListedResource = (
   return {
     uri: toResourceUri(schema, ResourceType.Table, tableName),
     handle: toHandle(schema, tableName),
-    mimeType: 'application/json',
     name: `${schema}.${tableName} table`,
     description,
   };
