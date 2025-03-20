@@ -33,7 +33,7 @@
     "types-generate": "dts-gen -m '@surface.dev/postgres' -s"
   },
   "dependencies": {
-    "@surface.dev/core": "file:../../core",
+    "@surface.dev/core": "file:../core",
     "zod": "^3.24.2"
   },
   "devDependencies": {

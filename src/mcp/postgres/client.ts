@@ -1,7 +1,7 @@
 import { Pool } from 'pg';
 import { logger } from '@surface.dev/utils';
-import * as errors from '@/mcp/errors';
-import config from '@/mcp/config';
+import * as errors from '@mcp/errors';
+import config from '@mcp/config';
 
 const pool = new Pool({
   connectionString: config.DATABASE_URL,

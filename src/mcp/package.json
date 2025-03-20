@@ -38,7 +38,7 @@
     }
   },
   "dependencies": {
-    "@surface.dev/utils": "file:../../utils",
+    "@surface.dev/utils": "file:../../../utils",
     "pg": "^8.14.1",
     "pg-format": "^1.0.4",
     "zod": "^3.24.2"

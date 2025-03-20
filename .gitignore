@@ -9,3 +9,4 @@ typings/
 tsbuildinfo
 .npm
 bin/
+**/bin/

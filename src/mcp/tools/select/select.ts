@@ -1,8 +1,8 @@
-import * as errors from '@/mcp/errors';
-import config from '@/mcp/config';
+import * as errors from '@mcp/errors';
+import config from '@mcp/config';
 import { logger, sleep, randomIntegerInRange } from '@surface.dev/utils';
-import { getPoolConnection } from '@/mcp/postgres/client';
-import * as sql from '@/mcp/postgres/sql/statements';
+import { getPoolConnection } from '@mcp/postgres/client';
+import * as sql from '@mcp/postgres/sql/statements';
 import { SelectToolInput, SelectToolOutput } from './types';
 
 /**
