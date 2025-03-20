@@ -1,6 +1,6 @@
 node_modules/
 **/node_modules/
-**/dist/
+dist/
 npm-debug.log*
 .DS_Store
 *.pem
@@ -8,4 +8,4 @@ npm-debug.log*
 typings/
 tsbuildinfo
 .npm
-**/bin/
+bin/
