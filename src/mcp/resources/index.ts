@@ -7,7 +7,8 @@ import listViewResources from './view/list';
 import readViewResource from './view/read';
 
 export async function listResources(): Promise<Resource[]> {
-  return [...(await Promise.all([listTableResources(), listViewResources()]))];
+  const [tables, views] = await Promise.all([listTableResources(), listViewResources()]);
+  return [...tables, ...views];
 }
 
 export async function readResource(uri: string): Promise<Resource> {

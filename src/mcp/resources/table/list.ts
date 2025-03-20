@@ -31,7 +31,7 @@ async function listTableResources(): Promise<Resource[]> {
     );
   }
 
-  // Return resources for each table.
+  // Format resources for each table.
   return tables.map(({ schema, name }) => {
     const comment = commentsByTablePath.get(`${schema}.${name}`);
     return formatTableAsListedResource(schema, name, comment);

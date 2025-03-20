@@ -32,6 +32,11 @@
     "build:main": "tsc -p tsconfig.json",
     "types-generate": "dts-gen -m '@surface.dev/postgres' -s"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
   "dependencies": {
     "@surface.dev/core": "file:../core",
     "zod": "^3.24.2"
