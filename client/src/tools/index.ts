@@ -1,1 +1,1 @@
-export * from './select/rpc';
+export * from './select/select';
