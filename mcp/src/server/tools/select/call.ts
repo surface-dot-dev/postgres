@@ -38,7 +38,7 @@ async function select({ query }: SelectToolInput, attempt: number = 1): Promise<
     throw `${errors.EMPTY_QUERY_RESULT}`;
   }
 
-  return result.rows || [];
+  return (result.rows || []) as SelectToolOutput;
 }
 
 export default select;

@@ -1,4 +1,7 @@
-import { client } from '../client';
-import { SelectToolInput, SelectToolOutput, ToolName } from '@shared/types';
+import client from '../client';
+import { ToolName, SelectToolInput, SelectToolOutput, SelectToolOutputSchema } from '@shared/types';
 
-export const select = client.Tool<SelectToolInput, SelectToolOutput>(ToolName.Select);
+export const select = client.tool<SelectToolInput, SelectToolOutput>(
+  ToolName.Select,
+  SelectToolOutputSchema
+);

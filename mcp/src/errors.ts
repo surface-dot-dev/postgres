@@ -5,6 +5,12 @@
 export const UNKNOWN_RESOURCE_TYPE = 'Unknown resource type';
 
 // ============================
+//  Tool Errors
+// ============================
+
+export const UNKNOWN_TOOL = 'Unknown tool';
+
+// ============================
 //  Database Errors
 // ============================
 

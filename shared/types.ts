@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 // ============================
 //  Generic Types
 // ============================
@@ -6,23 +8,7 @@ export type Dict = { [key: string]: any };
 
 export type DatabaseRecord = Dict;
 
-// ============================
-//  Resource Types
-// ============================
-
-export type Resource = {
-  uri: string;
-  handle: string;
-  mimeType?: string;
-  name?: string;
-  description?: string;
-  text?: string;
-};
-
-export enum ResourceType {
-  Table = "table",
-  View = "view",
-}
+export const DatabaseRecordSchema = z.record(z.string(), z.any());
 
 // ============================
 //  Tool Types
@@ -36,4 +22,10 @@ export type SelectToolInput = {
   query: string;
 };
 
+export const SelectToolInputSchema = z.object({
+  query: z.string(),
+});
+
 export type SelectToolOutput = DatabaseRecord[];
+
+export const SelectToolOutputSchema = z.array(DatabaseRecordSchema);

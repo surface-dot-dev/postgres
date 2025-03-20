@@ -38,7 +38,8 @@
     }
   },
   "dependencies": {
-    "@surface.dev/core": "file:../../core"
+    "@surface.dev/core": "file:../../core",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@types/node": "^20.14.8",

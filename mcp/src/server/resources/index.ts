@@ -1,5 +1,5 @@
 import * as errors from '@/errors';
-import { Resource, ResourceType } from '@shared/types';
+import { Resource, ResourceType } from './types';
 import { fromResourceUri, toHandle } from '@/utils/fmt';
 import listTableResources from './table/list';
 import listViewResources from './view/list';
@@ -14,7 +14,7 @@ export async function readResource(uri: string): Promise<Resource> {
   const { schema, resourceName, resourceType } = fromResourceUri(uri);
 
   let text = '';
-  switch (resourceType as ResourceType) {
+  switch (resourceType) {
     case ResourceType.Table:
       text = await readTableResource(uri, schema, resourceName);
       break;
