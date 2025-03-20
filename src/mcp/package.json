@@ -1,7 +1,7 @@
 {
   "name": "@surface.dev/postgres-mcp",
   "version": "0.0.1",
-  "description": "Surface MCP server for Postgres",
+  "description": "Postgres MCP server for Surface",
   "keywords": [
     "javascript",
     "typescript",
@@ -17,25 +17,16 @@
   "bugs": "https://github.com/surface-dot-dev/postgres/issues",
   "license": "MIT",
   "author": "Surface (https://surface.dev)",
-  "files": [
-    "dist",
-    "src"
-  ],
+  "files": ["dist"],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "sideEffects": false,
   "repository": "surface-dot-dev/postgres",
   "scripts": {
     "clean": "rimraf dist",
-    "format": "prettier --write \"{src,test}/**/*.{ts,tsx}\"",
-    "build": "run-s clean format build:*",
+    "build": "run-s clean build:*",
     "build:main": "tsc -p tsconfig.json",
     "types-generate": "dts-gen -m '@surface.dev/postgres-mcp' -s"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged"
-    }
   },
   "dependencies": {
     "@surface.dev/utils": "file:../../../utils",
@@ -45,10 +36,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.14.8",
-    "husky": "^4.3.0",
     "npm-run-all": "^4.1.5",
-    "prettier": "^2.1.2",
-    "pretty-quick": "^3.1.0",
     "rimraf": "^3.0.2",
     "typescript": "5.5.3"
   }

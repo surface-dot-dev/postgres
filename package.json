@@ -1,7 +1,7 @@
 {
   "name": "@surface.dev/postgres",
   "version": "0.0.1",
-  "description": "Postgres components and tools for Surface",
+  "description": "Postgres component library for Surface",
   "keywords": [
     "javascript",
     "typescript",
@@ -17,10 +17,7 @@
   "bugs": "https://github.com/surface-dot-dev/postgres/issues",
   "license": "MIT",
   "author": "Surface (https://surface.dev)",
-  "files": [
-    "dist",
-    "src"
-  ],
+  "files": ["dist"],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "sideEffects": false,

@@ -1,6 +1,11 @@
 {
   "include": ["."],
-  "exclude": ["node_modules"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "tools/client.ts",
+    "tools/**/index.ts"
+  ],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
@@ -9,8 +14,8 @@
     "skipLibCheck": true,
     "declaration": true,
     "declarationMap": true,
-    "module": "ESNext",
-    "target": "ESNext",
+    "module": "CommonJS",
+    "target": "ES2015",
     "outDir": "dist",
     "sourceMap": true,
     "strict": true,
@@ -21,6 +26,5 @@
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "noImplicitAny": false,
-    "jsx": "react-jsx"
   }
 }
