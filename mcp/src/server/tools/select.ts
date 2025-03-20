@@ -3,16 +3,12 @@ import config from '@/config';
 import { logger, sleep, randomIntegerInRange } from '@surface.dev/utils';
 import { getPoolConnection } from '@/data/source';
 import * as sql from '@/data/sql/statements';
-import { Dict } from '@shared/types';
+import { SelectToolInput, SelectToolOutput } from '@shared/types';
 
 /**
  * Perform a read-only SQL query.
- *
- * @param query - The SQL query to perform.
- * @param attempt - Retry attempt count (if needed due to deadlock).
- * @returns The result of the query as an array of dictionaries.
  */
-async function select(query: string, attempt: number = 1): Promise<Dict[]> {
+async function select({ query }: SelectToolInput, attempt: number = 1): Promise<SelectToolOutput> {
   const conn = await getPoolConnection();
 
   let result;
@@ -30,7 +26,7 @@ async function select(query: string, attempt: number = 1): Promise<Dict[]> {
     if (isDeadlock && attempt <= config.MAX_DEADLOCK_RETRIES) {
       logger.error(`${errors.DEADLOCK_RETRY} (${attempt}/${config.MAX_DEADLOCK_RETRIES})`);
       await sleep(randomIntegerInRange(50, 200)); // shake deadlock
-      return await select(query, attempt + 1);
+      return await select({ query }, attempt + 1);
     }
 
     throw `${errors.QUERY_FAILED}: ${error?.message || error}`;

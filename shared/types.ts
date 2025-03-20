@@ -1,3 +1,15 @@
+// ============================
+//  Generic Types
+// ============================
+
+export type Dict = { [key: string]: any };
+
+export type DatabaseRecord = Dict;
+
+// ============================
+//  Resource Types
+// ============================
+
 export type Resource = {
   uri: string;
   handle: string;
@@ -12,4 +24,12 @@ export enum ResourceType {
   View = "view",
 }
 
-export type Dict = { [key: string]: any };
+// ============================
+//  Tool Types
+// ============================
+
+export type SelectToolInput = {
+  query: string;
+};
+
+export type SelectToolOutput = DatabaseRecord[];
