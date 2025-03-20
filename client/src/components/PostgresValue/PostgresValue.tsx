@@ -49,9 +49,9 @@ export const PostgresValue = ({ type, children, ...props }: PostgresValueProps) 
   }
 };
 
-// ========================
-// Styled Components
-// ========================
+// ============================
+//  Styled Components
+// ============================
 
 const StyledNumber = styled.span`
   color: ${({ theme }) => theme.colors.primary};

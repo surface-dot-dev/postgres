@@ -1,12 +1,12 @@
-// ====================
-// Resource errors
-// ====================
+// ============================
+//  Resource Errors
+// ============================
 
 export const UNKNOWN_RESOURCE_TYPE = 'Unknown resource type';
 
-// ====================
-// Database errors
-// ====================
+// ============================
+//  Database Errors
+// ============================
 
 export const CLIENT_ERROR = 'Postgres client error';
 
