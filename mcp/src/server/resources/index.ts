@@ -2,8 +2,8 @@ import * as errors from '@/errors';
 import { Resource, ResourceType } from './types';
 import { fromResourceUri, toHandle } from '@/utils/fmt';
 import listTableResources from './table/list';
-import listViewResources from './view/list';
 import readTableResource from './table/read';
+import listViewResources from './view/list';
 import readViewResource from './view/read';
 
 export async function listResources(): Promise<Resource[]> {

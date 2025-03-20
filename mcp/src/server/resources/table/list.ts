@@ -1,4 +1,4 @@
-import { Resource, ResourceType } from '@shared/types';
+import { Resource, ResourceType } from '../types';
 import config from '@/config';
 import select from '@/server/tools/select/call';
 import * as sql from '@/data/sql/statements';
