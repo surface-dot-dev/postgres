@@ -1,8 +1,8 @@
 import { Resource, ResourceType } from '../types';
-import config from '@mcp/config';
-import select from '@mcp/tools/select/select';
-import * as sql from '@mcp/postgres/sql/statements';
-import { TableType } from '@mcp/postgres/sql/types';
+import config from '../../config';
+import select from '../../tools/select/select';
+import * as sql from '../../postgres/sql/statements';
+import { TableType } from '../../postgres/sql/types';
 import { toResourceUri, toHandle } from '../utils';
 
 type Table = {

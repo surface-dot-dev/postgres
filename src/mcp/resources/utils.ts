@@ -1,4 +1,4 @@
-import config from '@mcp/config';
+import config from '../config';
 
 export const toResourceUri = (schema: string, resourceType: string, resourceName: string): string =>
   [config.DATA_SOURCE_URI, schema, resourceType, resourceName].join('/');

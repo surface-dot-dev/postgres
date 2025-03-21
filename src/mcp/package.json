@@ -18,18 +18,20 @@
   "license": "MIT",
   "author": "Surface (https://surface.dev)",
   "files": ["dist"],
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/main/index.js",
+  "module": "dist/module/index.js",
+  "types": "dist/main/index.d.ts",
   "sideEffects": false,
   "repository": "surface-dot-dev/postgres",
   "scripts": {
     "clean": "rimraf dist",
     "build": "run-s clean build:*",
     "build:main": "tsc -p tsconfig.json",
+    "build:module": "tsc -p tsconfig.module.json",
     "types-generate": "dts-gen -m '@surface.dev/postgres-mcp' -s"
   },
   "dependencies": {
-    "@surface.dev/utils": "file:../../../utils",
+    "@surface.dev/utils": "0.0.1",
     "pg": "^8.14.1",
     "pg-format": "^1.0.4",
     "zod": "^3.24.2"

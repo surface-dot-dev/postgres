@@ -1,4 +1,4 @@
-import * as errors from '@mcp/errors';
+import * as errors from '../errors';
 import { Resource, ResourceType } from './types';
 import { fromResourceUri, toHandle } from './utils';
 import listTableResources from './table/list';

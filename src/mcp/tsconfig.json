@@ -7,16 +7,13 @@
     "tools/**/index.ts"
   ],
   "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@mcp/*": ["./*"]
-    },
     "skipLibCheck": true,
     "declaration": true,
     "declarationMap": true,
     "module": "CommonJS",
     "target": "ES2015",
-    "outDir": "dist",
+    "outDir": "dist/main",
+    "rootDir": ".",
     "sourceMap": true,
     "strict": true,
     "esModuleInterop": true,
@@ -25,6 +22,6 @@
     "stripInternal": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
-    "noImplicitAny": false,
+    "noImplicitAny": false
   }
 }

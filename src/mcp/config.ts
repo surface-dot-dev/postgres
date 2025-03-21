@@ -1,7 +1,7 @@
 import { ev, undelimit, trimSlashes } from '@surface.dev/utils';
 
 const DATABASE_URL = ev('DATABASE_URL');
-const { hostname, port, pathname } = new URL(DATABASE_URL);;
+const { hostname, port, pathname } = new URL(DATABASE_URL);
 const DATA_SOURCE_URI = `postgres://${hostname}:${port}/${trimSlashes(pathname)}`;
 
 const config = {
