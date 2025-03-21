@@ -10,7 +10,7 @@ import {
 } from './types';
 
 export type PostgresDataTableProps =
-  // Option #1: Given a query, columns & rows populate based on query results.
+  // Option #1: Given a query, columns & rows populate based on query results
   | {
       query: string;
       context?: string;

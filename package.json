@@ -1,6 +1,6 @@
 {
   "name": "@surface.dev/postgres",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "Postgres components & tools",
   "keywords": [
     "javascript",
@@ -18,7 +18,8 @@
   "license": "MIT",
   "author": "Surface (https://surface.dev)",
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
