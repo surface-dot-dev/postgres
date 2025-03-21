@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import * as dt from '@/utils/dataTypes';
+import * as dt from '../../utils/dataTypes';
 
 export type PostgresValueProps = {
   type: string;

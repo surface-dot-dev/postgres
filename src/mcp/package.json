@@ -1,7 +1,7 @@
 {
   "name": "@surface.dev/postgres-mcp",
   "version": "0.0.1",
-  "description": "Postgres MCP server for Surface",
+  "description": "Postgres MCP server",
   "keywords": [
     "javascript",
     "typescript",
