@@ -1,17 +1,18 @@
 {
-  "name": "@surface.dev/postgres",
-  "version": "0.0.4",
-  "description": "Postgres components & tools",
+  "name": "@surface.ui/postgres",
+  "version": "0.0.1",
+  "description": "Postgres UI Components",
   "keywords": [
     "javascript",
     "typescript",
     "surface",
     "surface.dev",
+    "surface.ui",
     "postgres",
     "postgresql",
     "psql",
-    "components",
-    "tools"
+    "ui",
+    "components"
   ],
   "homepage": "https://github.com/surface-dot-dev/postgres",
   "bugs": "https://github.com/surface-dot-dev/postgres/issues",
@@ -30,7 +31,7 @@
     "format": "prettier --write \"{src,test}/**/*.{ts,tsx}\"",
     "build": "run-s clean format build:*",
     "build:main": "tsc -p tsconfig.json",
-    "types-generate": "dts-gen -m '@surface.dev/postgres' -s"
+    "types-generate": "dts-gen -m '@surface.ui/postgres' -s"
   },
   "husky": {
     "hooks": {
@@ -38,7 +39,7 @@
     }
   },
   "dependencies": {
-    "@surface.dev/core": "^0.0.1",
+    "@surface.dev/ui": "^0.0.2",
     "zod": "^3.24.2"
   },
   "devDependencies": {

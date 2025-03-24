@@ -1,12 +1,13 @@
 {
-  "name": "@surface.dev/postgres-mcp",
+  "name": "@surface.mcp/postgres",
   "version": "0.0.1",
-  "description": "Postgres MCP server",
+  "description": "Postgres MCP Server",
   "keywords": [
     "javascript",
     "typescript",
     "surface",
     "surface.dev",
+    "surface.mcp",
     "postgres",
     "postgresql",
     "psql",
@@ -17,7 +18,9 @@
   "bugs": "https://github.com/surface-dot-dev/postgres/issues",
   "license": "MIT",
   "author": "Surface (https://surface.dev)",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "main": "dist/main/index.js",
   "module": "dist/module/index.js",
   "types": "dist/main/index.d.ts",
@@ -28,7 +31,7 @@
     "build": "run-s clean build:*",
     "build:main": "tsc -p tsconfig.json",
     "build:module": "tsc -p tsconfig.module.json",
-    "types-generate": "dts-gen -m '@surface.dev/postgres-mcp' -s"
+    "types-generate": "dts-gen -m '@surface.mcp/postgres' -s"
   },
   "dependencies": {
     "@surface.dev/utils": "0.0.1",
