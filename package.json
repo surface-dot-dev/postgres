@@ -42,7 +42,7 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
-    "@surface.dev/ui": "^0.0.2",
+    "@surface.dev/ui": "^0.0.3",
     "@surface.dev/tool-client": "^0.0.1",
     "@types/node": "^20.14.8",
     "@types/react": "18.3.12",
@@ -56,7 +56,7 @@
     "typescript": "5.5.3"
   },
   "peerDependencies": {
-    "@surface.dev/ui": "^0.0.2",
+    "@surface.dev/ui": "^0.0.3",
     "@surface.dev/tool-client": "^0.0.1",
     "prop-types": "^15.8.1",
     "react": "^18.0.0",
