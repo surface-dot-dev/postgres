@@ -1,4 +1,4 @@
-import client from '../client';
+import { newTool } from '@surface.dev/tool-client';
 import {
   SELECT_TOOL_NAME,
   SelectToolInput,
@@ -6,12 +6,9 @@ import {
   SelectToolOutputSchema,
 } from './types';
 
-export const select = async (input: SelectToolInput) => {
-  return 'success';
-};
-// export const select = client.tool<SelectToolInput, SelectToolOutput>(
-//   SELECT_TOOL_NAME,
-//   SelectToolOutputSchema
-// );
+export const select = newTool<SelectToolInput, SelectToolOutput>({
+  name: SELECT_TOOL_NAME,
+  outputSchema: SelectToolOutputSchema,
+});
 
 export { SelectToolInput, SelectToolOutput };
