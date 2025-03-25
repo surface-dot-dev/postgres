@@ -42,8 +42,9 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@modelcontextprotocol/sdk": ">=1.7.0",
     "@surface.dev/ui": "^0.0.3",
-    "@surface.dev/tool-client": "^0.0.1",
+    "@surface.dev/tool-client": "^0.0.2",
     "@types/node": "^20.14.8",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
@@ -57,7 +58,7 @@
   },
   "peerDependencies": {
     "@surface.dev/ui": "^0.0.3",
-    "@surface.dev/tool-client": "^0.0.1",
+    "@surface.dev/tool-client": "^0.0.2",
     "prop-types": "^15.8.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
