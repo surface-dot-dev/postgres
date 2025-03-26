@@ -1,34 +1,22 @@
 {
   "include": ["src"],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "src/mcp",
-    "!src/mcp/tools/client.ts",
-    "!src/mcp/tools/**/index.ts",
-    "!src/mcp/tools/**/types.ts"
-  ],
+  "exclude": ["node_modules"],
   "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"]
-    },
     "skipLibCheck": true,
     "declaration": true,
     "declarationMap": true,
-    "module": "ESNext",
+    "sourceMap": true,
+    "module": "CommonJS",
     "moduleResolution": "Node",
-    "target": "ESNext",
+    "target": "ES2015",
     "outDir": "dist",
     "rootDir": "src",
-    "sourceMap": true,
     "strict": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "stripInternal": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
-    "noImplicitAny": false,
-    "jsx": "react-jsx"
+    "noImplicitAny": false
   }
 }
