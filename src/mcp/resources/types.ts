@@ -1,11 +1,4 @@
-export type Resource = {
-  uri: string;
-  handle: string;
-  mimeType?: string;
-  name?: string;
-  description?: string;
-  text?: string;
-};
+export type { Resource } from '@surface.dev/mcp';
 
 export enum ResourceType {
   Table = 'table',

@@ -1,10 +1,6 @@
 import { z } from 'zod';
 
-export type Tool = {
-  name: string;
-  inputSchema: any;
-  call: (input: any) => Promise<any>;
-};
+export type { Tool } from '@surface.dev/mcp';
 
 export type DatabaseRecord = { [key: string]: any };
 

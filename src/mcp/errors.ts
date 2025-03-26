@@ -4,6 +4,8 @@
 
 export const UNKNOWN_RESOURCE_TYPE = 'Unknown resource type';
 
+export const INVALID_RESOURCE_URI = 'Invalid resource URI';
+
 // ============================
 //  Tool Errors
 // ============================

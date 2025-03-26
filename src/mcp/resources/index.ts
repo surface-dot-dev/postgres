@@ -1,4 +1,5 @@
 import * as errors from '../errors';
+import config from '../config';
 import { Resource, ResourceType } from './types';
 import { fromResourceUri, toHandle } from './utils';
 import listTableResources from './table/list';
@@ -12,8 +13,16 @@ export async function listResources(): Promise<Resource[]> {
 }
 
 export async function readResource(uri: string): Promise<Resource> {
+  // Validate resource URI.
+  if (!uri.startsWith(config.DATA_SOURCE_URI + '/')) {
+    throw `${errors.INVALID_RESOURCE_URI}: ${uri}`;
+  }
   const { schema, resourceName, resourceType } = fromResourceUri(uri);
+  if (!schema || !resourceName || !resourceType) {
+    throw `${errors.INVALID_RESOURCE_URI}: ${uri}`;
+  }
 
+  // Read specific resource by type.
   let text = '';
   switch (resourceType) {
     case ResourceType.Table:

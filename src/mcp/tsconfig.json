@@ -1,23 +1,15 @@
 {
   "include": ["."],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "tools/client.ts",
-    "tools/**/index.ts"
-  ],
+  "exclude": ["node_modules", "dist", "tools/**/index.ts"],
   "compilerOptions": {
     "skipLibCheck": true,
-    "declaration": true,
-    "declarationMap": true,
-    "module": "CommonJS",
     "target": "ES2015",
-    "outDir": "dist/main",
+    "module": "ES2015",
+    "moduleResolution": "Node",
+    "outDir": "dist",
     "rootDir": ".",
-    "sourceMap": true,
     "strict": true,
     "esModuleInterop": true,
-    "moduleResolution": "Node",
     "forceConsistentCasingInFileNames": true,
     "stripInternal": true,
     "allowSyntheticDefaultImports": true,

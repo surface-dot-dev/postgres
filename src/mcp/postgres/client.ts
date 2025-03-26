@@ -1,4 +1,4 @@
-import { Pool } from 'pg';
+import { Pool, PoolClient } from 'pg';
 import { logger } from '@surface.dev/utils';
 import * as errors from '../errors';
 import config from '../config';
@@ -10,16 +10,14 @@ const pool = new Pool({
   connectionTimeoutMillis: config.CONNECTION_TIMEOUT,
   statement_timeout: config.STATEMENT_TIMEOUT,
 });
-
 pool.on('error', (err) => logger.error(errors.CLIENT_ERROR, err));
 
-export async function getPoolConnection() {
-  let conn;
+export async function getPoolConnection(): Promise<PoolClient> {
+  let conn: PoolClient;
   try {
     conn = await pool.connect();
   } catch (err: unknown) {
     const error = err as Error;
-    conn && conn.release();
     logger.error(errors.CONNECTION_ERROR, error);
     throw `${errors.CONNECTION_ERROR}: ${error?.message || error}`;
   }
