@@ -1,6 +1,6 @@
 import { Resource } from '@surface.dev/mcp';
 import config from '../../config';
-import select from '../../tools/select/select';
+import { select } from '../../tools/select/select';
 import * as sql from '../../postgres/sql/statements';
 import { TableType } from '../../postgres/sql/types';
 import { toResourceUri, toHandle } from '../../utils';

@@ -33,7 +33,7 @@
     "build:main": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "@surface.dev/mcp": "../../mcp",
+    "@surface.dev/mcp": "0.0.3",
     "@surface.dev/utils": "0.0.3",
     "pg": "^8.14.1",
     "pg-format": "^1.0.4",

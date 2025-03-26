@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+
 import { logger } from '@surface.dev/utils';
 import { StdioServer } from '@surface.dev/mcp';
 import { resources } from './lib/resources';
