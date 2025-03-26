@@ -4,7 +4,7 @@
   "compilerOptions": {
     "skipLibCheck": true,
     "target": "ES2015",
-    "module": "ES2015",
+    "module": "CommonJS",
     "moduleResolution": "Node",
     "outDir": "dist",
     "rootDir": ".",
