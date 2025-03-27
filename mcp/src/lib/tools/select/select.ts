@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { Tool, ToolProxy } from '@surface.dev/mcp';
+import { Tool, ToolClient } from '@surface.dev/mcp';
 import { logger, sleep, randomIntegerInRange } from '@surface.dev/utils';
 import { getPoolConnection } from '../../postgres/client';
 import * as sql from '../../postgres/sql/statements';
@@ -70,7 +70,7 @@ export const selectTool: Tool = {
   call: select,
 };
 
-export const selectToolProxy = ToolProxy<SelectToolInput, SelectToolOutput>({
+export const selectToolClient = ToolClient<SelectToolInput, SelectToolOutput>({
   name: selectTool.name,
   outputSchema: SelectToolOutputSchema,
 });

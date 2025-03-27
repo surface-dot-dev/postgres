@@ -5,6 +5,6 @@ export const tools: Tool[] = [];
 //  Select
 // ============================
 
-import { selectTool, selectToolProxy, SelectToolInput, SelectToolOutput } from './select/select';
-export { selectToolProxy as select, SelectToolInput, SelectToolOutput };
+import { selectTool, selectToolClient, SelectToolInput, SelectToolOutput } from './select/select';
+export { selectToolClient as select, SelectToolInput, SelectToolOutput };
 tools.push(selectTool);

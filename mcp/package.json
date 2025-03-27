@@ -28,12 +28,14 @@
   },
   "repository": "surface-dot-dev/postgres",
   "scripts": {
+    "server": "node dist/server.js",
+    "proxy": "mcp-proxy",
     "clean": "rimraf dist",
     "build": "genversion src/lib/version.ts --es6 && run-s clean build:*",
     "build:main": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "@surface.dev/mcp": "0.0.3",
+    "@surface.dev/mcp": "0.0.4",
     "@surface.dev/utils": "0.0.3",
     "pg": "^8.14.1",
     "pg-format": "^1.0.4",
