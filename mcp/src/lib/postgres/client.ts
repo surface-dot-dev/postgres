@@ -16,7 +16,7 @@ export async function getPoolConnection(): Promise<PoolClient> {
   let conn: PoolClient;
   try {
     conn = await pool.connect();
-  } catch (err: unknown) {
+  } catch (err) {
     const error = err as Error;
     logger.error(errors.CONNECTION_ERROR, error);
     throw `${errors.CONNECTION_ERROR}: ${error?.message || error}`;

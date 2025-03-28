@@ -19,12 +19,12 @@ export async function select(
   try {
     await conn.query(sql.BEGIN_READ_ONLY_TX);
     result = await conn.query(query);
-  } catch (err: unknown) {
-    const error = err as Error;
+  } catch (err) {
     await conn.query(sql.ROLLBACK);
     conn.release();
 
     // (Maybe) try again if deadlocked.
+    const error = err as Error;
     const message = error.message || error.toString() || '';
     const isDeadlock = message.toLowerCase().includes('deadlock');
     if (isDeadlock && attempt <= config.MAX_DEADLOCK_RETRIES) {
