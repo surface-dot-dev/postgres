@@ -11,3 +11,6 @@ tsbuildinfo
 .npm
 bin/
 **/bin/
+ui/public/
+ui/index.html
+ui/src/dev.tsx
