@@ -1,24 +1,9 @@
-import { z } from 'zod';
-import { Tool, ToolClient } from '@surface.dev/mcp';
 import { logger, sleep, randomIntegerInRange } from '@surface.dev/utils';
 import { getPoolConnection } from '../../postgres/client';
 import * as sql from '../../postgres/sql/statements';
 import * as errors from '../../errors';
 import config from '../../config';
-
-// ============================
-//  Select | Types
-// ============================
-
-export type SelectToolInput = {
-  query: string;
-};
-export const SelectToolInputSchema = z.object({
-  query: z.string(),
-});
-
-export type SelectToolOutput = Record<string, any>[];
-export const SelectToolOutputSchema = z.array(z.record(z.string(), z.any()));
+import { SelectToolInput, SelectToolOutput } from './types';
 
 // ============================
 //  Select | Call
@@ -59,18 +44,3 @@ export async function select(
 
   return (result.rows || []) as SelectToolOutput;
 }
-
-// ============================
-//  Select | Tool
-// ============================
-
-export const selectTool: Tool = {
-  name: 'select',
-  inputSchema: SelectToolInputSchema,
-  call: select,
-};
-
-export const selectToolClient = ToolClient<SelectToolInput, SelectToolOutput>({
-  name: selectTool.name,
-  outputSchema: SelectToolOutputSchema,
-});

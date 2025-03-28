@@ -2,9 +2,14 @@ import { Tool } from '@surface.dev/mcp';
 export const tools: Tool[] = [];
 
 // ============================
-//  Select
+//  Select | Tool
 // ============================
 
-import { selectTool, selectToolClient, SelectToolInput, SelectToolOutput } from './select/select';
-export { selectToolClient as select, SelectToolInput, SelectToolOutput };
-tools.push(selectTool);
+import { select } from './select/select';
+import { SELECT_TOOL_NAME, SelectToolInputSchema } from './select/types';
+
+tools.push({
+  name: SELECT_TOOL_NAME,
+  inputSchema: SelectToolInputSchema,
+  call: select,
+});

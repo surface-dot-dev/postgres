@@ -5,18 +5,19 @@
     "skipLibCheck": true,
     "declaration": true,
     "declarationMap": true,
-    "sourceMap": true,
-    "module": "CommonJS",
+    "module": "ESNext",
     "moduleResolution": "Node",
-    "target": "ES2015",
-    "outDir": "dist/main",
+    "target": "ESNext",
+    "outDir": "dist",
     "rootDir": "src",
+    "sourceMap": true,
     "strict": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "stripInternal": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "jsx": "react-jsx"
   }
 }

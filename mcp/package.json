@@ -9,8 +9,6 @@
     "surface.dev",
     "surface.mcp",
     "postgres",
-    "postgresql",
-    "psql",
     "mcp",
     "server"
   ],
@@ -21,21 +19,23 @@
   "files": [
     "dist"
   ],
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/main/client.js",
+  "module": "dist/module/client.js",
+  "types": "dist/main/client.d.ts",
   "bin": {
-    "surface-mcp-postgres": "dist/server.js"
+    "surface-mcp-postgres": "dist/main/index.js"
   },
   "repository": "surface-dot-dev/postgres",
   "scripts": {
-    "server": "node dist/server.js",
+    "server": "node dist/main/index.js",
     "proxy": "mcp-proxy",
     "clean": "rimraf dist",
     "build": "genversion src/lib/version.ts --es6 && run-s clean build:*",
-    "build:main": "tsc -p tsconfig.json"
+    "build:main": "tsc -p tsconfig.json",
+    "build:module": "tsc -p tsconfig.module.json"
   },
   "dependencies": {
-    "@surface.dev/mcp": "0.0.4",
+    "@surface.dev/mcp": "0.0.6",
     "@surface.dev/utils": "0.0.3",
     "pg": "^8.14.1",
     "pg-format": "^1.0.4",

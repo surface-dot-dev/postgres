@@ -1,15 +1,22 @@
 {
   "include": ["src"],
-  "exclude": ["node_modules"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/index.ts",
+    "src/lib",
+    "!src/lib/tools/client.ts",
+    "!src/lib/tools/**/types.ts"
+  ],
   "compilerOptions": {
     "skipLibCheck": true,
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
-    "module": "CommonJS",
+    "module": "ES2015",
     "moduleResolution": "Node",
     "target": "ES2015",
-    "outDir": "dist/main",
+    "outDir": "dist/module",
     "rootDir": "src",
     "strict": true,
     "esModuleInterop": true,
