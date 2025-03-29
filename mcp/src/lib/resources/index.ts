@@ -1,12 +1,9 @@
 import { Resources } from '@surface.dev/mcp';
+import { ROOT, PATH_TEMPLATE } from './uri';
 import { table } from './table/table';
 import { view } from './view/view';
-import * as uri from './uri';
 
 export const resources: Resources = {
+  uri: { root: ROOT, pathTemplate: PATH_TEMPLATE },
   types: [table, view],
-  uri: {
-    root: uri.ROOT,
-    pathTemplate: uri.PATH_TEMPLATE,
-  },
 };

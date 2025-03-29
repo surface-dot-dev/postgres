@@ -14,6 +14,7 @@ export const table: ResourceType = {
   mimeType: 'application/json',
   list: listTables,
   read: readTable,
+  hash: hashTablesList,
 };
 
 // ============================
@@ -37,6 +38,7 @@ export async function listTables(): Promise<Resource[]> {
   // List all *basic* tables in the exposed schemas.
   const query = sql.listTablesInSchemas(config.SCHEMAS, [TableType.Table]);
   const tables = (await select({ query })) as Table[];
+  if (!tables.length) return [];
 
   // Get the comments for each table.
   const commentedTables = (await select({
@@ -85,4 +87,15 @@ const formatTableAsListedResource = (
 
 export async function readTable({ schema, resourceName }: ReadResourceParams): Promise<any> {
   return {};
+}
+
+// ============================
+//  Table | Hash
+// ============================
+
+export async function hashTablesList(): Promise<string> {
+  const result = await select({
+    query: sql.hashTablesInSchemas(config.SCHEMAS, [TableType.Table]),
+  });
+  return result[0].hash || '';
 }

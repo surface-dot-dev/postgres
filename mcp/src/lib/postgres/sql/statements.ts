@@ -9,6 +9,11 @@ export const listTablesInSchemas = (schemas: string[], tableTypes: string[]): st
 FROM information_schema.tables WHERE table_schema in (${schemas.map((s) => literal(s)).join(',')}) 
 AND table_type in (${tableTypes.map((t) => literal(t)).join(',')})`;
 
+export const hashTablesInSchemas = (schemas: string[], tableTypes: string[]): string =>
+  `SELECT md5(string_agg(table_schema || '.' || table_name, ',' ORDER BY table_schema, table_name)) as hash 
+FROM information_schema.tables WHERE table_schema in (${schemas.map((s) => literal(s)).join(',')}) 
+AND table_type in (${tableTypes.map((t) => literal(t)).join(',')})`;
+
 export const getTableComments = (tables: { schema: string; name: string }[]): string =>
   `SELECT n.nspname AS schema, c.relname as name, d.description AS comment 
 FROM pg_description d 

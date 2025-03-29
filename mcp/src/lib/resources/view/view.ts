@@ -14,6 +14,7 @@ export const view: ResourceType = {
   mimeType: 'application/json',
   list: listViews,
   read: readView,
+  hash: hashViewsList,
 };
 
 // ============================
@@ -37,6 +38,7 @@ export async function listViews(): Promise<Resource[]> {
   // List all views in the exposed schemas.
   const query = sql.listTablesInSchemas(config.SCHEMAS, [TableType.View]);
   const views = (await select({ query })) as View[];
+  if (!views.length) return [];
 
   // Get the comments for each view.
   const commentedViews = (await select({
@@ -82,4 +84,13 @@ const formatViewAsListedResource = (
 
 export async function readView({ schema, resourceName }: ReadResourceParams): Promise<any> {
   return {};
+}
+
+// ============================
+//  View | Hash
+// ============================
+
+export async function hashViewsList(): Promise<string> {
+  const result = await select({ query: sql.hashTablesInSchemas(config.SCHEMAS, [TableType.View]) });
+  return result[0].hash || '';
 }
