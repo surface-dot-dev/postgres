@@ -1,15 +1,24 @@
-import { Resource } from '@surface.dev/mcp';
+import { Resource, ResourceType, ReadResourceParams } from '@surface.dev/mcp';
 import config from '../../config';
 import { select } from '../../tools/select/select';
 import * as sql from '../../postgres/sql/statements';
 import { TableType } from '../../postgres/sql/types';
-import { toResourceUri, toHandle } from '../../utils';
+import { toResourceUri } from '../uri';
+
+// ============================
+//  View | Resource
+// ============================
+
+export const view: ResourceType = {
+  name: 'view',
+  mimeType: 'application/json',
+  list: listViews,
+  read: readView,
+};
 
 // ============================
 //  View | Types
 // ============================
-
-export const VIEW_RESOURCE_TYPE = 'view';
 
 type View = {
   schema: string;
@@ -54,11 +63,16 @@ const formatViewAsListedResource = (
   if (viewComment) {
     description += `: ${viewComment}`;
   }
+  let handle = viewName;
+  if (schema !== 'public') {
+    handle = `${schema}.${viewName}`;
+  }
   return {
-    uri: toResourceUri(schema, VIEW_RESOURCE_TYPE, viewName),
-    handle: toHandle(schema, viewName),
+    uri: toResourceUri(view.name, schema, viewName),
     name: `${schema}.${viewName} view`,
     description,
+    mimeType: view.mimeType,
+    handle,
   };
 };
 
@@ -66,6 +80,6 @@ const formatViewAsListedResource = (
 //  View | Read
 // ============================
 
-export async function readView(uri: string, schema: string, name: string): Promise<string> {
-  return '';
+export async function readView({ schema, resourceName }: ReadResourceParams): Promise<any> {
+  return {};
 }

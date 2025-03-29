@@ -1,15 +1,24 @@
-import { Resource } from '@surface.dev/mcp';
+import { Resource, ResourceType, ReadResourceParams } from '@surface.dev/mcp';
 import config from '../../config';
 import { select } from '../../tools/select/select';
 import * as sql from '../../postgres/sql/statements';
 import { TableType } from '../../postgres/sql/types';
-import { toResourceUri, toHandle } from '../../utils';
+import { toResourceUri } from '../uri';
+
+// ============================
+//  Table | Resource
+// ============================
+
+export const table: ResourceType = {
+  name: 'table',
+  mimeType: 'application/json',
+  list: listTables,
+  read: readTable,
+};
 
 // ============================
 //  Table | Types
 // ============================
-
-export const TABLE_RESOURCE_TYPE = 'table';
 
 type Table = {
   schema: string;
@@ -57,11 +66,16 @@ const formatTableAsListedResource = (
   if (tableComment) {
     description += `: ${tableComment}`;
   }
+  let handle = tableName;
+  if (schema !== 'public') {
+    handle = `${schema}.${tableName}`;
+  }
   return {
-    uri: toResourceUri(schema, TABLE_RESOURCE_TYPE, tableName),
-    handle: toHandle(schema, tableName),
+    uri: toResourceUri(table.name, schema, tableName),
     name: `${schema}.${tableName} table`,
     description,
+    mimeType: table.mimeType,
+    handle,
   };
 };
 
@@ -69,6 +83,6 @@ const formatTableAsListedResource = (
 //  Table | Read
 // ============================
 
-export async function readTable(uri: string, schema: string, name: string): Promise<string> {
-  return '';
+export async function readTable({ schema, resourceName }: ReadResourceParams): Promise<any> {
+  return {};
 }
