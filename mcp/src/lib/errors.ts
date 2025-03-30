@@ -2,15 +2,9 @@
 //  Resource Errors
 // ============================
 
-export const UNKNOWN_RESOURCE_TYPE = 'Unknown resource type';
+export const RESOURCE_NOT_FOUND = 'Resource not found';
 
-export const INVALID_RESOURCE_URI = 'Invalid resource URI';
-
-// ============================
-//  Tool Errors
-// ============================
-
-export const UNKNOWN_TOOL = 'Unknown tool';
+export const READING_RESOURCE_FAILED = 'Failed to read resource';
 
 // ============================
 //  Database Errors
@@ -25,3 +19,7 @@ export const QUERY_FAILED = 'Query failed';
 export const EMPTY_QUERY_RESULT = 'Query returned empty result';
 
 export const DEADLOCK_RETRY = 'Deadlock detected, retrying...';
+
+export const NO_PRIMARY_KEY = 'Table has no primary key';
+
+export const NO_TABLE_ID = 'Table has no table oid';

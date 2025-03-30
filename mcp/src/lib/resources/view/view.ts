@@ -18,32 +18,17 @@ export const view: ResourceType = {
 };
 
 // ============================
-//  View | Types
-// ============================
-
-type View = {
-  schema: string;
-  name: string;
-};
-
-type CommentedView = View & {
-  comment: string;
-};
-
-// ============================
 //  View | List
 // ============================
 
 export async function listViews(): Promise<Resource[]> {
   // List all views in the exposed schemas.
   const query = sql.listTablesInSchemas(config.SCHEMAS, [TableType.View]);
-  const views = (await select({ query })) as View[];
+  const views = (await select({ query })) as { schema: string; name: string }[];
   if (!views.length) return [];
 
   // Get the comments for each view.
-  const commentedViews = (await select({
-    query: sql.getTableComments(views),
-  })) as CommentedView[];
+  const commentedViews = await select({ query: sql.getTableComments(views) });
   const commentsByViewPath = new Map<string, string>();
   for (const commentedView of commentedViews) {
     commentsByViewPath.set(`${commentedView.schema}.${commentedView.name}`, commentedView.comment);
@@ -91,6 +76,8 @@ export async function readView({ schema, resourceName }: ReadResourceParams): Pr
 // ============================
 
 export async function hashViewsList(): Promise<string> {
-  const result = await select({ query: sql.hashTablesInSchemas(config.SCHEMAS, [TableType.View]) });
+  const result = await select({
+    query: sql.hashTablesInSchemas(config.SCHEMAS, [TableType.View]),
+  });
   return result[0].hash || '';
 }

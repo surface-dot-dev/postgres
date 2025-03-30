@@ -36,8 +36,8 @@
     "build:module": "tsc -p tsconfig.module.json"
   },
   "dependencies": {
-    "@surface.dev/mcp": "../../mcp",
-    "@surface.dev/utils": "0.0.4",
+    "@surface.dev/mcp": "^0.0.7",
+    "@surface.dev/utils": "^0.0.5",
     "pg": "^8.14.1",
     "pg-format": "^1.0.4",
     "zod": "^3.24.2"
