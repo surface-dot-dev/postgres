@@ -116,14 +116,14 @@ export async function readTable({
     incomingForeignKeyReferences,
   ] = await Promise.all([
     getTableId(schema, name),
-    getTableComment(schema, name),
-    getTableSize(schema, name),
-    getTableColumns(schema, name),
-    getTablePrimaryKey(schema, name),
-    getTableIndexes(schema, name),
-    getTableUniqueConstraints(schema, name),
-    getTableOutgoingForeignKeyConstraints(schema, name),
-    getTableIncomingForeignKeyReferences(schema, name),
+    getComment(schema, name),
+    getRowCountEstimate(schema, name),
+    getColumns(schema, name),
+    getPrimaryKey(schema, name),
+    getIndexes(schema, name),
+    getUniqueConstraints(schema, name),
+    getOutgoingForeignKeyConstraints(schema, name),
+    getIncomingForeignKeyReferences(schema, name),
   ]);
 
   // todo: assign primary key bool to cols
@@ -158,17 +158,17 @@ async function getTableId(schema: string, name: string): Promise<number> {
   return Number(data.tableId);
 }
 
-async function getTableComment(schema: string, name: string): Promise<string | null> {
+async function getComment(schema: string, name: string): Promise<string | null> {
   const results = await select({ query: sql.getTableComments([{ schema, name }]) });
   return results[0]?.comment || null;
 }
 
-async function getTableSize(schema: string, name: string): Promise<number> {
+async function getRowCountEstimate(schema: string, name: string): Promise<number> {
   const results = await select({ query: sql.getTableRowCountEstimate(schema, name) });
   return Number(results[0]?.estimate || 0);
 }
 
-async function getTableColumns(schema: string, name: string): Promise<Column[]> {
+async function getColumns(schema: string, name: string): Promise<Column[]> {
   const results = await select({ query: sql.getTableColumns(schema, name) });
   return results.map((result) => ({
     id: Number(result.id),
@@ -181,7 +181,7 @@ async function getTableColumns(schema: string, name: string): Promise<Column[]> 
   }));
 }
 
-async function getTablePrimaryKey(schema: string, name: string): Promise<PrimaryKey> {
+async function getPrimaryKey(schema: string, name: string): Promise<PrimaryKey> {
   const results = await select({ query: sql.getPrimaryKey(schema, name) });
   const pk = results[0];
   if (!pk) {
@@ -193,7 +193,7 @@ async function getTablePrimaryKey(schema: string, name: string): Promise<Primary
   };
 }
 
-async function getTableIndexes(schema: string, name: string): Promise<Index[]> {
+async function getIndexes(schema: string, name: string): Promise<Index[]> {
   const results = await select({ query: sql.getTableIndexes(schema, name) });
   return results.map((result) => ({
     name: result.name,
@@ -204,10 +204,7 @@ async function getTableIndexes(schema: string, name: string): Promise<Index[]> {
   }));
 }
 
-async function getTableUniqueConstraints(
-  schema: string,
-  name: string
-): Promise<UniqueConstraint[]> {
+async function getUniqueConstraints(schema: string, name: string): Promise<UniqueConstraint[]> {
   const results = await select({ query: sql.getTableUniqueConstraints(schema, name) });
   return results.map(({ name, columns }) => ({
     name,
@@ -215,7 +212,7 @@ async function getTableUniqueConstraints(
   }));
 }
 
-async function getTableOutgoingForeignKeyConstraints(
+async function getOutgoingForeignKeyConstraints(
   schema: string,
   name: string
 ): Promise<ForeignKeyConstraint[]> {
@@ -231,7 +228,7 @@ async function getTableOutgoingForeignKeyConstraints(
   }));
 }
 
-async function getTableIncomingForeignKeyReferences(
+async function getIncomingForeignKeyReferences(
   schema: string,
   name: string
 ): Promise<ForeignKeyConstraint[]> {
