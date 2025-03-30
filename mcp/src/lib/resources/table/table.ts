@@ -126,8 +126,6 @@ export async function readTable({
     getIncomingForeignKeyReferences(schema, name),
   ]);
 
-  // todo: assign primary key bool to cols
-
   return {
     id,
     type: table.name,
