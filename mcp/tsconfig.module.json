@@ -6,7 +6,8 @@
     "src/index.ts",
     "src/lib",
     "!src/lib/tools/client.ts",
-    "!src/lib/tools/**/types.ts"
+    "!src/lib/tools/**/types.ts",
+    "!src/lib/postgres/**/types.ts"
   ],
   "compilerOptions": {
     "skipLibCheck": true,

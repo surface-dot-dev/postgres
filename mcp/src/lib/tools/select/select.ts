@@ -1,41 +1,71 @@
-import { logger, sleep, randomIntegerInRange } from '@surface.dev/utils';
-import { getPoolConnection } from '../../postgres/client';
-import * as sql from '../../postgres/sql/statements';
-import * as errors from '../../errors';
-import config from '../../config';
-import { SelectToolInput, SelectToolOutput } from './types';
+import { FieldDef } from 'pg';
+import { performReadQuery } from '../../postgres/client';
+import { SelectToolInput, SelectToolOutput, Source, SourceColumn } from './types';
+import { getCachedTable } from '../../resources/cache';
 
 // ============================
 //  Select | Call
 // ============================
 
-export async function select(
-  { query }: SelectToolInput,
-  attempt: number = 1
-): Promise<SelectToolOutput> {
-  const conn = await getPoolConnection();
+export async function select({ query }: SelectToolInput): Promise<SelectToolOutput> {
+  const { rows, fields } = await performReadQuery(query);
+  const { columns, sources } = getUnderlyingDataSources(fields);
+  return { rows, columns, sources };
+}
 
-  let result;
-  try {
-    await conn.query(sql.BEGIN_READ_ONLY_TX);
-    result = await conn.query(query);
-  } catch (err) {
-    await conn.query(sql.ROLLBACK);
-    conn.release();
+function getUnderlyingDataSources(fields: FieldDef[]): {
+  columns: SourceColumn[];
+  sources: Source[];
+} {
+  const columns: SourceColumn[] = [];
+  const sourceMap = new Map<number, Source>();
 
-    // (Maybe) try again if deadlocked.
-    const error = err as Error;
-    const message = error.message || error.toString() || '';
-    const isDeadlock = message.toLowerCase().includes('deadlock');
-    if (isDeadlock && attempt <= config.MAX_DEADLOCK_RETRIES) {
-      logger.error(`${errors.DEADLOCK_RETRY} (${attempt}/${config.MAX_DEADLOCK_RETRIES})`);
-      await sleep(randomIntegerInRange(50, 200)); // shake deadlock
-      return await select({ query }, attempt + 1);
+  for (const field of fields) {
+    let column: SourceColumn = { name: field.name };
+
+    // Computed columns.
+    if (!field.tableID || !field.columnID) {
+      columns.push(column);
+      continue;
     }
 
-    throw `${errors.QUERY_FAILED}: ${error?.message || error}`;
-  }
-  conn.release();
+    // See if the full table details are available in the cache.
+    const tableDetails = getCachedTable(field.tableID);
+    if (!tableDetails) {
+      columns.push(column);
+      continue;
+    }
 
-  return (result.rows || []) as SelectToolOutput;
+    // Populate map of unique data sources used in the query.
+    if (!sourceMap.has(field.tableID)) {
+      sourceMap.set(field.tableID, {
+        id: field.tableID,
+        schema: tableDetails.schema,
+        name: tableDetails.name,
+        comment: tableDetails.comment,
+        primaryKey: tableDetails.primaryKey,
+        outgoingForeignKeyConstraints: tableDetails.outgoingForeignKeyConstraints,
+        incomingForeignKeyReferences: tableDetails.incomingForeignKeyReferences,
+      });
+    }
+
+    const columnDetails = tableDetails.columns.get(field.columnID);
+    if (!columnDetails) {
+      columns.push(column);
+      continue;
+    }
+
+    // Enhance known column with full details.
+    column.type = columnDetails.type;
+    column.nullable = columnDetails.nullable;
+    column.default = columnDetails.default;
+    column.comment = columnDetails.comment;
+    column.sourceId = field.tableID;
+    columns.push(column);
+  }
+
+  return {
+    columns,
+    sources: [...sourceMap.values()],
+  };
 }

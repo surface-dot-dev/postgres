@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 export enum TableType {
   Table = 'BASE TABLE',
   View = 'VIEW',
@@ -17,6 +19,10 @@ export type PrimaryKey = {
   name: string;
   columns: string[];
 };
+export const PrimaryKeySchema = z.object({
+  name: z.string(),
+  columns: z.array(z.string()),
+});
 
 export type Index = {
   name: string;
@@ -40,3 +46,12 @@ export type ForeignKeyConstraint = {
   targetTable: string;
   targetColumns: string[];
 };
+export const ForeignKeyConstraintSchema = z.object({
+  name: z.string(),
+  sourceSchema: z.string(),
+  sourceTable: z.string(),
+  sourceColumns: z.array(z.string()),
+  targetSchema: z.string(),
+  targetTable: z.string(),
+  targetColumns: z.array(z.string()),
+});
