@@ -14,4 +14,4 @@ bin/
 mcp/src/dev.ts
 ui/public/
 ui/index.html
-ui/src/dev.tsx
+ui/src/dev/
