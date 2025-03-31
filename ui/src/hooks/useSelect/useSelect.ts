@@ -2,21 +2,20 @@ import { useState, useEffect } from 'react';
 import { select } from '../../tools';
 import type { SelectToolOutput } from '../../tools';
 
-const defaultOutput: SelectToolOutput = {
+const emptyOutput: SelectToolOutput = {
   rows: [],
   columns: [],
   sources: [],
 };
 
 export const useSelect = (source: string, query: string) => {
-  const [output, setOutput] = useState<SelectToolOutput>(defaultOutput);
+  const [output, setOutput] = useState<SelectToolOutput>(emptyOutput);
 
   useEffect(() => {
     if (!source || !query) {
-      setOutput(defaultOutput);
+      setOutput(emptyOutput);
       return;
     }
-
     const performQuery = async () => {
       const result = await select({ query }, { source });
       setOutput(result);

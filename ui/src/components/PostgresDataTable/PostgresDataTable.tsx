@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
+import { useSelect } from '../../hooks';
 import { DataTable } from '@surface.dev/ui';
-import { useSelect } from '../../hooks/useSelect/useSelect';
 import { PostgresColumnName } from '../PostgresColumnName';
 import { PostgresColumnValue } from '../PostgresColumnValue';
 import {
