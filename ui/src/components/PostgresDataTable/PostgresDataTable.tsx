@@ -10,35 +10,21 @@ import {
   PostgresDataTableDataCellType,
 } from './types';
 
-export type PostgresDataTableProps =
-  // Option #1: Given a query, columns & rows populate based on query results
-  | {
-      query: string;
-      context?: string;
-      // --
-      columns?: never;
-      rows?: never;
-    }
+export type PostgresDataTableProps = {
+  source?: string;
+  query?: string;
+  context?: string;
+  columns?: PostgresDataTableColumnType[];
+  rows?: PostgresDataTableRowType[];
+};
 
-  // Option #2: Columns & rows are explicitly given, upfront.
-  | {
-      columns: PostgresDataTableColumnType[];
-      rows: PostgresDataTableRowType[];
-      context?: string;
-      // --
-      query?: never;
-    };
+const ctx = 'a table of postgres query results';
 
-const ctx = 'table of postgres query results';
-
-export const PostgresDataTable = ({
-  query = '',
-  context = ctx,
-  ...props
-}: PostgresDataTableProps) => {
-  const output = useSelect(query);
+export const PostgresDataTable = (props: PostgresDataTableProps) => {
+  const output = useSelect(props.source || '', props.query || '');
   const columns = props.columns ? props.columns : output.columns;
   const rows = props.rows ? props.rows : output.rows;
+  const context = props.context || ctx;
 
   const renderHeaderCell = useCallback(
     ({ column }: PostgresDataTableHeaderCellType) => (

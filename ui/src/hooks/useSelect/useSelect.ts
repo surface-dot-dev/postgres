@@ -8,21 +8,21 @@ const defaultOutput: SelectToolOutput = {
   sources: [],
 };
 
-export const useSelect = (query: string) => {
+export const useSelect = (source: string, query: string) => {
   const [output, setOutput] = useState<SelectToolOutput>(defaultOutput);
 
   useEffect(() => {
-    if (!query) {
+    if (!source || !query) {
       setOutput(defaultOutput);
       return;
     }
 
     const performQuery = async () => {
-      const result = await select({ query }, { source: 'mcp' });
+      const result = await select({ query }, { source });
       setOutput(result);
     };
     performQuery();
-  }, [query]);
+  }, [source, query]);
 
   return output;
 };
