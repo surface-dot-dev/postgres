@@ -1,7 +1,7 @@
 import { Resource, ResourceType, ReadResourceParams } from '@surface.dev/mcp';
 import config from '../../config';
-import { select } from '../../tools/select/select';
 import * as sql from '../../postgres/sql/statements';
+import { performReadQuery } from '../../postgres/client';
 import { TableType } from '../../postgres/sql/types';
 import { toResourceUri } from '../uri';
 
@@ -24,11 +24,11 @@ export const view: ResourceType = {
 export async function listViews(): Promise<Resource[]> {
   // List all views in the exposed schemas.
   const query = sql.listTablesInSchemas(config.SCHEMAS, [TableType.View]);
-  const views = (await select({ query })) as { schema: string; name: string }[];
+  const views = (await performReadQuery(query)).rows as { schema: string; name: string }[];
   if (!views.length) return [];
 
   // Get the comments for each view.
-  const commentedViews = await select({ query: sql.getTableComments(views) });
+  const commentedViews = (await performReadQuery(sql.getTableComments(views))).rows;
   const commentsByViewPath = new Map<string, string>();
   for (const commentedView of commentedViews) {
     commentsByViewPath.set(`${commentedView.schema}.${commentedView.name}`, commentedView.comment);
@@ -76,8 +76,7 @@ export async function readView({ schema, resourceName }: ReadResourceParams): Pr
 // ============================
 
 export async function hashViewsList(): Promise<string> {
-  const result = await select({
-    query: sql.hashTablesInSchemas(config.SCHEMAS, [TableType.View]),
-  });
+  const result = (await performReadQuery(sql.hashTablesInSchemas(config.SCHEMAS, [TableType.View])))
+    .rows;
   return result[0].hash || '';
 }

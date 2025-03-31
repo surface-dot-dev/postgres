@@ -3,7 +3,7 @@ import { formatError } from '@surface.dev/utils';
 import { extractIntrospectedColumnNames } from '../utils';
 import * as errors from '../../errors';
 import config from '../../config';
-import { select } from '../../tools/select/select';
+import { performReadQuery } from '../../postgres/client';
 import * as sql from '../../postgres/sql/statements';
 import { toResourceUri } from '../uri';
 import {
@@ -34,11 +34,11 @@ export const table: ResourceType = {
 export async function listTables(): Promise<Resource[]> {
   // List all *basic* tables in the exposed schemas.
   const query = sql.listTablesInSchemas(config.SCHEMAS, [TableType.Table]);
-  const tables = (await select({ query })) as { schema: string; name: string }[];
+  const tables = (await performReadQuery(query)).rows as { schema: string; name: string }[];
   if (!tables.length) return [];
 
   // Get the comments for each table.
-  const commentedTables = await select({ query: sql.getTableComments(tables) });
+  const commentedTables = (await performReadQuery(sql.getTableComments(tables))).rows;
   const commentsByTablePath = new Map<string, string>();
   for (const commentedTable of commentedTables) {
     commentsByTablePath.set(
@@ -80,7 +80,7 @@ const formatTableAsListedResource = (
 //  Table | Read
 // ============================
 
-type Table = {
+export type Table = {
   id: number;
   type: string;
   schema: string;
@@ -143,12 +143,12 @@ export async function readTable({
 }
 
 async function doesTableExist(schema: string, name: string): Promise<boolean> {
-  const results = await select({ query: sql.doesTableExist(schema, name) });
+  const results = (await performReadQuery(sql.doesTableExist(schema, name))).rows;
   return results[0].exists === true;
 }
 
 async function getTableId(schema: string, name: string): Promise<number> {
-  const results = await select({ query: sql.getTableId(schema, name) });
+  const results = (await performReadQuery(sql.getTableId(schema, name))).rows;
   const data = results[0];
   if (!data) {
     throw formatError(errors.NO_TABLE_ID, '', { schema, name });
@@ -157,17 +157,17 @@ async function getTableId(schema: string, name: string): Promise<number> {
 }
 
 async function getComment(schema: string, name: string): Promise<string | null> {
-  const results = await select({ query: sql.getTableComments([{ schema, name }]) });
+  const results = (await performReadQuery(sql.getTableComments([{ schema, name }]))).rows;
   return results[0]?.comment || null;
 }
 
 async function getRowCountEstimate(schema: string, name: string): Promise<number> {
-  const results = await select({ query: sql.getTableRowCountEstimate(schema, name) });
+  const results = (await performReadQuery(sql.getTableRowCountEstimate(schema, name))).rows;
   return Number(results[0]?.estimate || 0);
 }
 
 async function getColumns(schema: string, name: string): Promise<Column[]> {
-  const results = await select({ query: sql.getTableColumns(schema, name) });
+  const results = (await performReadQuery(sql.getTableColumns(schema, name))).rows;
   return results.map((result) => ({
     id: Number(result.id),
     name: result.name,
@@ -180,7 +180,7 @@ async function getColumns(schema: string, name: string): Promise<Column[]> {
 }
 
 async function getPrimaryKey(schema: string, name: string): Promise<PrimaryKey> {
-  const results = await select({ query: sql.getPrimaryKey(schema, name) });
+  const results = (await performReadQuery(sql.getPrimaryKey(schema, name))).rows;
   const pk = results[0];
   if (!pk) {
     throw formatError(errors.NO_PRIMARY_KEY, '', { schema, name });
@@ -192,7 +192,7 @@ async function getPrimaryKey(schema: string, name: string): Promise<PrimaryKey> 
 }
 
 async function getIndexes(schema: string, name: string): Promise<Index[]> {
-  const results = await select({ query: sql.getTableIndexes(schema, name) });
+  const results = (await performReadQuery(sql.getTableIndexes(schema, name))).rows;
   return results.map((result) => ({
     name: result.name,
     definition: result.definition,
@@ -203,7 +203,7 @@ async function getIndexes(schema: string, name: string): Promise<Index[]> {
 }
 
 async function getUniqueConstraints(schema: string, name: string): Promise<UniqueConstraint[]> {
-  const results = await select({ query: sql.getTableUniqueConstraints(schema, name) });
+  const results = (await performReadQuery(sql.getTableUniqueConstraints(schema, name))).rows;
   return results.map(({ name, columns }) => ({
     name,
     columns: extractIntrospectedColumnNames(columns),
@@ -214,7 +214,8 @@ async function getOutgoingForeignKeyConstraints(
   schema: string,
   name: string
 ): Promise<ForeignKeyConstraint[]> {
-  const results = await select({ query: sql.getTableOutgoingForeignKeyConstraints(schema, name) });
+  const results = (await performReadQuery(sql.getTableOutgoingForeignKeyConstraints(schema, name)))
+    .rows;
   return results.map((constraint) => ({
     name: constraint.name,
     sourceSchema: schema,
@@ -230,7 +231,8 @@ async function getIncomingForeignKeyReferences(
   schema: string,
   name: string
 ): Promise<ForeignKeyConstraint[]> {
-  const results = await select({ query: sql.getTableIncomingForeignKeyReferences(schema, name) });
+  const results = (await performReadQuery(sql.getTableIncomingForeignKeyReferences(schema, name)))
+    .rows;
   return results.map((constraint) => ({
     name: constraint.name,
     sourceSchema: constraint.sourceSchema,
@@ -247,8 +249,13 @@ async function getIncomingForeignKeyReferences(
 // ============================
 
 export async function hashTablesList(): Promise<string> {
-  const result = await select({
-    query: sql.hashTablesInSchemas(config.SCHEMAS, [TableType.Table]),
-  });
-  return result[0].hash || '';
+  const result = (
+    await performReadQuery(sql.hashTablesInSchemas(config.SCHEMAS, [TableType.Table]))
+  ).rows;
+  return result[0]?.hash || '';
+}
+
+export async function hashTable(schema: string, name: string): Promise<string> {
+  const result = (await performReadQuery(sql.hashTable(schema, name))).rows;
+  return result[0]?.hash || '';
 }

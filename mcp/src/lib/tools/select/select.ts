@@ -37,10 +37,5 @@ export async function select(
   }
   conn.release();
 
-  if (!result) {
-    logger.error(errors.EMPTY_QUERY_RESULT, query);
-    throw `${errors.EMPTY_QUERY_RESULT}`;
-  }
-
   return (result.rows || []) as SelectToolOutput;
 }

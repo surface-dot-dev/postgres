@@ -5,6 +5,7 @@ import { StdioServer } from '@surface.dev/mcp';
 import { resources } from './lib/resources';
 import { tools } from './lib/tools';
 import { version } from './lib/version';
+import { populateTablesCache } from './lib/resources/cache';
 
 const server = new StdioServer({
   name: '@surface.mcp/postgres',
@@ -14,6 +15,9 @@ const server = new StdioServer({
 });
 
 async function runServer() {
+  logger.info('Populating tables cache...');
+  await populateTablesCache();
+
   logger.info('Starting Postgres MCP server...');
   await server.connect();
 }

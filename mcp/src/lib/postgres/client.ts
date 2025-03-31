@@ -1,6 +1,7 @@
-import { Pool, PoolClient } from 'pg';
-import { logger } from '@surface.dev/utils';
+import { Pool, PoolClient, QueryResult } from 'pg';
+import { logger, sleep, randomIntegerInRange } from '@surface.dev/utils';
 import * as errors from '../errors';
+import * as sql from './sql/statements';
 import config from '../config';
 
 const pool = new Pool({
@@ -22,4 +23,32 @@ export async function getPoolConnection(): Promise<PoolClient> {
     throw `${errors.CONNECTION_ERROR}: ${error?.message || error}`;
   }
   return conn;
+}
+
+export async function performReadQuery(query: string, attempt: number = 1): Promise<QueryResult> {
+  const conn = await getPoolConnection();
+
+  let result: QueryResult;
+  try {
+    await conn.query(sql.BEGIN_READ_ONLY_TX);
+    result = await conn.query(query);
+  } catch (err) {
+    await conn.query(sql.ROLLBACK);
+    conn.release();
+
+    // (Maybe) try again if deadlocked.
+    const error = err as Error;
+    const message = error.message || error.toString() || '';
+    const isDeadlock = message.toLowerCase().includes('deadlock');
+    if (isDeadlock && attempt <= config.MAX_DEADLOCK_RETRIES) {
+      logger.error(`${errors.DEADLOCK_RETRY} (${attempt}/${config.MAX_DEADLOCK_RETRIES})`);
+      await sleep(randomIntegerInRange(50, 200)); // shake deadlock
+      return await performReadQuery(query, attempt + 1);
+    }
+
+    throw `${errors.QUERY_FAILED}: ${error?.message || error}`;
+  }
+  conn.release();
+
+  return result;
 }

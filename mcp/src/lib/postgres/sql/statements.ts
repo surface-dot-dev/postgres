@@ -9,11 +9,6 @@ export const listTablesInSchemas = (schemas: string[], tableTypes: string[]): st
 FROM information_schema.tables WHERE table_schema in (${schemas.map((s) => literal(s)).join(',')}) 
 AND table_type in (${tableTypes.map((t) => literal(t)).join(',')})`;
 
-export const hashTablesInSchemas = (schemas: string[], tableTypes: string[]): string =>
-  `SELECT md5(string_agg(table_schema || '.' || table_name, ',' ORDER BY table_schema, table_name)) as hash 
-FROM information_schema.tables WHERE table_schema in (${schemas.map((s) => literal(s)).join(',')}) 
-AND table_type in (${tableTypes.map((t) => literal(t)).join(',')})`;
-
 export const getTableComments = (tables: { schema: string; name: string }[]): string =>
   `SELECT n.nspname AS schema, c.relname as name, d.description AS comment 
 FROM pg_description d 
@@ -197,3 +192,145 @@ GROUP BY
     tc.constraint_name,
     tc.table_schema,
     tc.table_name`;
+
+export const hashTablesInSchemas = (schemas: string[], tableTypes: string[]): string =>
+  `SELECT md5(string_agg(table_schema || '.' || table_name, ',' ORDER BY table_schema, table_name)) as hash 
+FROM information_schema.tables WHERE table_schema in (${schemas.map((s) => literal(s)).join(',')}) 
+AND table_type in (${tableTypes.map((t) => literal(t)).join(',')})`;
+
+export const hashTable = (schema: string, name: string): string => `
+WITH table_comment_hash AS (
+  SELECT md5(COALESCE(description, '')) as comment_hash 
+  FROM pg_description 
+  WHERE objoid = '${ident(schema)}.${ident(name)}'::regclass::oid
+  AND objsubid = 0
+),
+column_metadata AS (
+  SELECT
+    c.table_schema,
+    c.table_name,
+    c.column_name,
+    c.data_type,
+    c.is_nullable,
+    COALESCE(c.column_default, 'NULL') AS column_default,
+    COALESCE(pgd.description, 'NULL') AS column_comment,
+    c.ordinal_position
+  FROM
+    information_schema.columns c
+  LEFT JOIN
+    pg_catalog.pg_description pgd ON
+      pgd.objoid = '${ident(schema)}.${ident(name)}'::regclass::oid AND
+      pgd.objsubid = c.ordinal_position
+  WHERE
+    c.table_schema = ${literal(schema)}
+    AND c.table_name = ${literal(name)}
+),
+columns_hash AS (
+  SELECT MD5(STRING_AGG(
+    column_name || '|' ||
+    data_type || '|' ||
+    is_nullable || '|' ||
+    column_default || '|' ||
+    column_comment,
+    ',' ORDER BY ordinal_position
+  )) AS columns_hash
+  FROM column_metadata
+),
+index_metadata AS (
+  SELECT
+    i.indrelid::regclass::text AS table_name,
+    ic.relname AS index_name,
+    pg_get_indexdef(i.indexrelid) AS index_definition,
+    array_to_string(array_agg(a.attname ORDER BY array_position(i.indkey, a.attnum)), ',') AS index_columns,
+    i.indisunique AS is_unique,
+    am.amname AS index_type
+  FROM
+    pg_index i
+  JOIN pg_class ic ON i.indexrelid = ic.oid
+  JOIN pg_am am ON ic.relam = am.oid
+  JOIN pg_attribute a ON a.attrelid = i.indrelid AND a.attnum = ANY(i.indkey)
+  JOIN pg_namespace n ON n.oid = ic.relnamespace
+  WHERE
+    n.nspname = ${literal(schema)}
+    AND i.indrelid::regclass::text = ${literal(name)}
+  GROUP BY
+    i.indrelid, ic.relname, i.indexrelid, i.indisunique, am.amname
+),
+indexes_hash AS (
+  SELECT MD5(STRING_AGG(
+    index_name || '|' ||
+    index_definition || '|' ||
+    index_columns || '|' ||
+    is_unique::text || '|' ||
+    index_type,
+    ',' ORDER BY index_name
+  )) AS indexes_hash
+  FROM index_metadata
+),
+fk_references AS (
+  SELECT 
+    kcu.constraint_name,
+    kcu.constraint_schema,
+    'REFERENCES ' || ccu.table_name || '(' || 
+      STRING_AGG(ccu.column_name, ', ' ORDER BY kcu.ordinal_position) || ')' AS ref_clause
+  FROM 
+    information_schema.key_column_usage kcu
+  JOIN information_schema.constraint_column_usage ccu
+    ON ccu.constraint_name = kcu.constraint_name
+    AND ccu.constraint_schema = kcu.constraint_schema
+  WHERE
+    kcu.table_schema = ${literal(schema)}
+    AND kcu.table_name = ${literal(name)}
+  GROUP BY 
+    kcu.constraint_name,
+    kcu.constraint_schema,
+    ccu.table_name
+),
+constraint_metadata AS (
+  SELECT
+    tc.constraint_name,
+    tc.constraint_type,
+    STRING_AGG(kcu.column_name, ', ' ORDER BY kcu.ordinal_position) AS constraint_columns,
+    fkr.ref_clause AS references_clause,
+    CASE tc.constraint_type
+      WHEN 'CHECK' THEN pg_get_constraintdef(pgc.oid)
+      ELSE NULL
+    END AS check_clause
+  FROM 
+    information_schema.table_constraints tc
+  JOIN information_schema.key_column_usage kcu
+    ON kcu.constraint_name = tc.constraint_name
+    AND kcu.constraint_schema = tc.constraint_schema
+    AND kcu.table_schema = tc.table_schema
+    AND kcu.table_name = tc.table_name
+  LEFT JOIN fk_references fkr
+    ON fkr.constraint_name = tc.constraint_name 
+    AND fkr.constraint_schema = tc.constraint_schema
+  LEFT JOIN pg_constraint pgc
+    ON pgc.conname = tc.constraint_name
+  WHERE 
+    tc.table_schema = ${literal(schema)}
+    AND tc.table_name = ${literal(name)}
+  GROUP BY
+    tc.constraint_name,
+    tc.constraint_type,
+    fkr.ref_clause,
+    pgc.oid
+),
+constraints_hash AS (
+  SELECT MD5(STRING_AGG(
+    constraint_name || '|' ||
+    constraint_type || '|' ||
+    constraint_columns || '|' ||
+    COALESCE(references_clause, '') || '|' ||
+    COALESCE(check_clause, ''),
+    ',' ORDER BY constraint_name
+  )) AS constraints_hash
+  FROM constraint_metadata
+)
+SELECT MD5(
+  COALESCE((SELECT comment_hash FROM table_comment_hash), '') || '|' ||
+  COALESCE((SELECT columns_hash FROM columns_hash), '') || '|' ||
+  COALESCE((SELECT indexes_hash FROM indexes_hash), '') || '|' ||
+  COALESCE((SELECT constraints_hash FROM constraints_hash), '')
+) as hash`;
