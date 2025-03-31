@@ -54,11 +54,11 @@ export const SelectToolOutputSchema = z.object({
   columns: z.array(
     z.object({
       name: z.string(),
-      type: z.string(),
-      nullable: z.boolean(),
-      default: z.string().nullable(),
-      comment: z.string().nullable(),
-      sourceId: z.number(),
+      type: z.string().optional(),
+      nullable: z.boolean().optional(),
+      default: z.string().nullable().optional(),
+      comment: z.string().nullable().optional(),
+      sourceId: z.number().optional(),
     })
   ),
   sources: z.array(

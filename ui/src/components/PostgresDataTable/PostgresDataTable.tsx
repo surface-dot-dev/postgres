@@ -1,5 +1,6 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 import { DataTable } from '@surface.dev/ui';
+import { useSelect } from '../../hooks/useSelect/useSelect';
 import { PostgresColumnName } from '../PostgresColumnName';
 import { PostgresColumnValue } from '../PostgresColumnValue';
 import {
@@ -30,12 +31,15 @@ export type PostgresDataTableProps =
 
 const ctx = 'table of postgres query results';
 
-export const PostgresDataTable = ({ query, context = ctx, ...props }: PostgresDataTableProps) => {
-  const [columns, setColumns] = useState<PostgresDataTableColumnType[]>(props.columns || []);
-  const [rows, setRows] = useState<PostgresDataTableRowType[]>(props.rows || []);
-  const numFixedColumns = useMemo(() => columns.filter((c) => c.inPrimaryKey).length, [columns]);
+export const PostgresDataTable = ({
+  query = '',
+  context = ctx,
+  ...props
+}: PostgresDataTableProps) => {
+  const output = useSelect(query);
+  const columns = props.columns ? props.columns : output.columns;
+  const rows = props.rows ? props.rows : output.rows;
 
-  // TODO: Add *specific* context.
   const renderHeaderCell = useCallback(
     ({ column }: PostgresDataTableHeaderCellType) => (
       <PostgresColumnName column={column}>{column.name}</PostgresColumnName>
@@ -43,7 +47,6 @@ export const PostgresDataTable = ({ query, context = ctx, ...props }: PostgresDa
     []
   );
 
-  // TODO: Add *specific* context.
   const renderDataCell = useCallback(
     ({ column, value }: PostgresDataTableDataCellType) => (
       <PostgresColumnValue column={column}>{value}</PostgresColumnValue>
@@ -51,12 +54,11 @@ export const PostgresDataTable = ({ query, context = ctx, ...props }: PostgresDa
     []
   );
 
-  // TODO: Add *specific* context once query is analyzed and more is known about the data sources.
   return (
     <DataTable
       columns={columns}
       rows={rows}
-      numFixedColumns={numFixedColumns}
+      numFixedColumns={0}
       context={context}
       renderHeaderCell={(props) => renderHeaderCell(props as PostgresDataTableHeaderCellType)}
       renderDataCell={(props) => renderDataCell(props as PostgresDataTableDataCellType)}
