@@ -191,7 +191,7 @@ The following Components are specialized UI elements that source and display dat
 
 ### PostgresDataTable
 
-The PostgresDataTable Component specializes the Surface UI framework's DataTable Component by integrating the useSelect Hook, creating a streamlined way to display results from any Postgres query. Use this Component whenever you need a straightforward way to display records from a Postgres Data Source.
+The `PostgresDataTable` Component specializes the Surface UI framework's `DataTable` Component by integrating the `useSelect` Hook, creating a streamlined way to display results from any Postgres query. Use this Component whenever you need a straightforward way to display records from a Postgres Data Source.
 
 #### Props
 
@@ -203,14 +203,10 @@ The PostgresDataTable Component specializes the Surface UI framework's DataTable
 type PostgresDataTableProps = PostgresDataTableQueryProps | PostgresDataTableStaticProps;
 
 /**
- * Props for a PostgresDataTable component that dynamically loads data via a query
+ * Props for a PostgresDataTable component that loads data
+ * via a query (i.e. "query" mode)
  */
 type PostgresDataTableQueryProps = {
-  /**
-   * Specifies this table will load data via a query
-   */
-  mode: 'query';
-
   /**
    * The name of the Postgres Data Source to query
    */
@@ -239,14 +235,10 @@ type PostgresDataTableQueryProps = {
 };
 
 /**
- * Props for a PostgresDataTable component that displays static data
+ * Props for a PostgresDataTable component that displays
+ * static data ("static" mode)
  */
 type PostgresDataTableStaticProps = {
-  /**
-   * Specifies this table will use static data provided via props
-   */
-  mode: 'static';
-
   /**
    * Never used in static mode - no Data Source needed
    */
