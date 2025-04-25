@@ -2,7 +2,7 @@
 
 The `@surface.ui/postgres` integration library is a collection of Tools, Hooks, and specialized Components that enable developers to quickly create data-driven Surface Apps that interface directly with Postgres databases while maintaining consistent UI patterns and security best practices. It offers ready-to-use Components for common data operations and visualizations, powerful Hooks for custom data fetching, and low-level Tools for complex query building.
 
-First, we'll examine each of these building blocks in detail, organized by Surface concept: Tools, Hooks, and Components. Then, we'll detail each of the library's complementary helper functions. Finally, we'll discuss more general best practices to implement when using this library.
+First, we'll examine each of these building blocks in detail, organized by Surface concept: Tools, Hooks, and Components. Then, we'll detail each of the library's complementary helper functions. Finally, we'll discuss general best practices to implement when using this library.
 
 ## Tools
 
@@ -138,7 +138,7 @@ import { select } from 'surface.ui/postgres';
 async function main() {
   const { rows, columns, sources } = await select(
     { query: `select * from "public"."users"` },
-    { source: 'pg_prod' }
+    { source: 'pg_prod' } // name of Data Source in stack
   );
 
   console.log(
@@ -151,7 +151,7 @@ async function main() {
 main();
 ```
 
-As demonstrated in the example above, not only does the `select` Tool return the resulting rows for a query, it also returns information about the underlying columns and tables that were used to source that query.
+As demonstrated in the example above, not only does the `select` Tool return the results of a query, it also returns information about the underlying columns and tables that were used to source that query.
 
 ## Hooks
 
@@ -159,7 +159,7 @@ The following Hooks serve as wrapper functions that abstract away the complexity
 
 ### useSelect
 
-The `useSelect` Hook builds upon the `select` Tool, providing a simplified, React-friendly interface for executing read-only SQL queries against a Postgres Data Source.
+The `useSelect` Hook builds upon the `select` Tool, providing a simplified interface to execute read-only SQL queries against a Postgres Data Source.
 
 #### Function Signature
 
@@ -191,23 +191,219 @@ The following Components are specialized UI elements that source and display dat
 
 ### PostgresDataTable
 
-...
+The PostgresDataTable Component specializes the Surface UI framework's DataTable Component by integrating the useSelect Hook, creating a streamlined way to display results from any Postgres query. Use this Component whenever you need a straightforward way to display records from a Postgres Data Source.
 
 #### Props
 
 ```typescript
-...
+/**
+ * Props for the PostgresDataTable component.
+ * Must choose between "query" mode and "static" mode.
+ */
+type PostgresDataTableProps = PostgresDataTableQueryProps | PostgresDataTableStaticProps;
+
+/**
+ * Props for a PostgresDataTable component that dynamically loads data via a query
+ */
+type PostgresDataTableQueryProps = {
+  /**
+   * Specifies this table will load data via a query
+   */
+  mode: 'query';
+
+  /**
+   * The name of the Postgres Data Source to query
+   */
+  source: string;
+
+  /**
+   * The read-only SQL query to execute
+   */
+  query: string;
+
+  /**
+   * What the table (and the data within it) represents contextutally
+   * within the broader application.
+   */
+  context?: string;
+
+  /**
+   * Never used in query mode - columns are derived from query results
+   */
+  columns?: never;
+
+  /**
+   * Never used in query mode - rows are derived from query results
+   */
+  rows?: never;
+};
+
+/**
+ * Props for a PostgresDataTable component that displays static data
+ */
+type PostgresDataTableStaticProps = {
+  /**
+   * Specifies this table will use static data provided via props
+   */
+  mode: 'static';
+
+  /**
+   * Never used in static mode - no Data Source needed
+   */
+  source?: never;
+
+  /**
+   * Never used in static mode - no query needed
+   */
+  query?: never;
+
+  /**
+   * Array of column definitions specifying the table structure
+   */
+  columns: PostgresDataTableColumnType[];
+
+  /**
+   * Array of data rows to display in the table
+   */
+  rows: PostgresDataTableRowType[];
+
+  /**
+   * What the table (and the data within it) represents contextutally
+   * within the broader application.
+   */
+  context?: string;
+};
 ```
+
+As shown in the above type definitions, the `PostgresDataTable` Component can be configured in two mutually exclusive modes: "query" mode for dynamically fetching data directly from a Postgres database using `source` and `query` props, or "static" mode for displaying pre-fetched data using `columns` and `rows` props. "query" mode is by far the most common, while "static" mode is reserved for more specific cases where data has been preloaded from memory or cache.
 
 #### Supporting Types
 
 ```typescript
-...
+/** Defines the structure of a column in a Postgres data table */
+type PostgresDataTableColumnType = {
+  /**
+   * Name of the column, used as key to access row values
+   */
+  name: string;
+
+  /**
+   * The Postgres data type of the column (undefined for computed columns).
+   */
+  type?: string;
+};
+
+/**
+ * Represents a single row of data in the table.
+ * A flexible object type where keys correspond to
+ * column names and values can be of any type
+ */
+type PostgresDataTableRowType = Record<string, any>;
+
+/**
+ * Properties passed to header cell render functions for
+ * customizing table headers
+ */
+type PostgresDataTableHeaderCellType = {
+  /**
+   * Column definition containing name and type
+   */
+  column: PostgresDataTableColumnType;
+
+  /**
+   * Zero-based index of the column in the table
+   */
+  columnIndex: number;
+};
+
+/**
+ * Properties passed to data cell render functions for
+ * rendering individual table cells
+ */
+type PostgresDataTableDataCellType = {
+  /**
+   * Column definition containing name and type
+   */
+  column: PostgresDataTableColumnType;
+
+  /**
+   * Zero-based index of the column in the table
+   */
+  columnIndex: number;
+
+  /**
+   * Complete row data object containing all column values
+   */
+  row: PostgresDataTableRowType;
+
+  /**
+   * Zero-based index of the row in the table
+   */
+  rowIndex: number;
+
+  /**
+   * The specific value for this cell
+   * (equivalent to row[column.name])
+   */
+  value: any;
+};
 ```
 
-#### Example — Something
+#### Example — Basic Query Results View
 
-...
+```jsx
+import React from 'react';
+import { View, Main, PostgresDataTable } from '@surface.dev/ui';
+
+export const App = () => {
+  const source = 'pg_prod';
+  const query = `SELECT * FROM "public"."users" ORDER BY "created_at" DESC LIMIT 50`;
+
+  return (
+    <View>
+      <Main>
+        <PostgresDataTable source={source} query={query} />
+      </Main>
+    </View>
+  );
+};
+```
+
+In the above example, a Surface App uses the `PostgresDataTable` Component to display the 50 most recent records from a Postgres table named "users". The Component runs in "query" mode, which requires two parameters: the query to execute and the target Data Source. By internally combining `DataTable` with `useSelect`, the `PostgresDataTable` Component can dynamically fetch and display the query results in a polished, virtualized React table.
+
+#### Example — Query with Variables
+
+For dynamically constructed queries, this Library provides two helper functions—`ident` and `literal`—which properly escape values to prevent SQL injection attacks. Here's a basic example:
+
+```jsx
+import React, { useState } from 'react';
+import { View, Main, PostgresDataTable, ident, literal } from '@surface.dev/ui';
+
+export const App = () => {
+  const [schemaName, setSchemaName] = useState('public');
+  const [tableName, setTableName] = useState('users');
+  const [ageFilter, ageFilter] = useState(30);
+
+  // ...other stateful variables ...
+
+  const source = 'pg_prod';
+  const query = `SELECT * FROM ${schemaName}.${ident(tableName)} WHERE age = ${literal(ageFilter)}`;
+
+  // ... more component logic ...
+
+  return (
+    <View>
+      <Main>
+        <PostgresDataTable source={source} query={query} />
+      </Main>
+    </View>
+  );
+};
+```
+
+In this example, the `PostgresDataTable` Component displays results from a dynamically constructed query built using the `ident` and `literal` helper functions. These functions are essential when incorporating user-provided or dynamic values into SQL queries. They ensure proper escaping of identifiers and literals to prevent SQL injection attacks while keeping queries flexible. This approach works especially well for interactive Apps where users need to filter or customize their data views.
+
+For more details about these helper functions, see the "Helpers" section later in this documentation.
 
 ### PostgresColumnName
 
