@@ -133,12 +133,12 @@ type Source = {
 Here's a basic example of using the `select` Tool to perform a simple query on a Postgres table named `users`:
 
 ```javascript
-import { select } from 'surface.ui/postgres';
+import { select } from "surface.ui/postgres";
 
 async function main() {
   const { rows, columns, sources } = await select(
     { query: `select * from "public"."users"` },
-    { source: 'pg_prod' } // name of Data Source in stack
+    { source: "pg_prod" } // name of Data Source in stack
   );
 
   console.log(
@@ -177,7 +177,7 @@ Note that the `useSelect` Hook returns a `SelectToolOutput` type—identical to 
 #### Example Usage
 
 ```jsx
-import { useSelect } from 'surface.ui/postgres';
+import { useSelect } from "surface.ui/postgres";
 
 const SomeComponent = (props: { source: string, query: string }) => {
   const { rows, columns, sources } = useSelect(props.source, props.query);
