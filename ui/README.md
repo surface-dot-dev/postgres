@@ -344,17 +344,20 @@ type PostgresDataTableDataCellType = {
 #### Example — Basic Query Results View
 
 ```jsx
-import React from 'react';
-import { View, Main, PostgresDataTable } from '@surface.dev/ui';
+import React from "react";
+import { View, Main, PostgresDataTable } from "@surface.dev/ui";
 
 export const App = () => {
-  const source = 'pg_prod';
+  const source = "pg_prod";
   const query = `SELECT * FROM "public"."users" ORDER BY "created_at" DESC LIMIT 50`;
 
   return (
     <View>
       <Main>
-        <PostgresDataTable source={source} query={query} />
+        <PostgresDataTable
+          source={source}
+          query={query}
+        />
       </Main>
     </View>
   );
@@ -368,27 +371,28 @@ In the above example, a Surface App uses the `PostgresDataTable` Component to di
 For dynamically constructed queries, this Library provides two helper functions—`ident` and `literal`—which properly escape values to prevent SQL injection attacks. Here's a basic example:
 
 ```jsx
-import React, { useState } from 'react';
-import { View, Main, PostgresDataTable, ident, literal } from '@surface.dev/ui';
+import React, { useState } from "react";
+import { View, Main, PostgresDataTable, ident, literal } from "@surface.dev/ui";
 
 export const App = () => {
-  const [schemaName, setSchemaName] = useState('public');
-  const [tableName, setTableName] = useState('users');
+  const [schemaName, setSchemaName] = useState("public");
+  const [tableName, setTableName] = useState("users");
   const [ageFilter, ageFilter] = useState(30);
 
   // ...other stateful variables ...
 
-  const source = 'pg_prod';
-  const query = `SELECT * FROM ${ident(schemaName)}.${ident(tableName)} WHERE age = ${literal(
-    ageFilter
-  )}`;
+  const source = "pg_prod";
+  const query = `SELECT * FROM ${ident(schemaName)}.${ident(tableName)} WHERE age = ${literal(ageFilter)}`;
 
   // ... more component logic ...
 
   return (
     <View>
       <Main>
-        <PostgresDataTable source={source} query={query} />
+        <PostgresDataTable
+          source={source}
+          query={query}
+        />
       </Main>
     </View>
   );
