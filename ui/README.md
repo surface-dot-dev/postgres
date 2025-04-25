@@ -155,7 +155,7 @@ As demonstrated in the example above, not only does the `select` Tool return the
 
 ## Hooks
 
-The following React hooks serve as wrapper functions that abstract away the complexity of using Postgres Tools directly, providing a more React-friendly interface. They make it easier to integrate Postgres operations into React components by handling state management, data fetching, and lifecycle events in a way that follows React conventions and best practices.
+The following Hooks serve as wrapper functions that abstract away the complexity of using Postgres Tools directly, providing a more React-friendly interface. They make it easier to integrate Postgres operations into React components by handling state management, data fetching, and lifecycle events in a way that follows React conventions and best practices.
 
 ### useSelect
 
@@ -169,7 +169,7 @@ The `useSelect` Hook builds upon the `select` Tool, providing a simplified, Reac
  * @param query - The SQL query to execute.
  * @returns The results of the query containing rows, columns, and sources.
  */
-const useSelect = (source: string, query: string): SelectToolOutput;
+function useSelect(source: string, query: string): SelectToolOutput;
 ```
 
 Note that the `useSelect` Hook returns a `SelectToolOutput` type—identical to the output of the `select` Tool.
@@ -187,12 +187,92 @@ const SomeComponent = (props: { source: string, query: string }) => {
 
 ## Components
 
+The following Components are specialized UI elements that source and display data from Postgres databases. These ready-to-use components integrate directly with Postgres databases while abstracting away the complexity of data operations and maintaining consistent patterns and best practices for data visualization and manipulation.
+
+### PostgresDataTable
+
+...
+
+#### Props
+
+```typescript
+...
+```
+
+#### Supporting Types
+
+```typescript
+...
+```
+
+#### Example — Something
+
+...
+
+### PostgresColumnName
+
+...desc
+
+#### Props
+
+```typescript
+...
+```
+
+#### Example Usage
+
+...
+
+### PostgresColumnValue
+
+...desc
+
+#### Props
+
+```typescript
+...
+```
+
+#### Example Usage
+
 ...
 
 ## Helpers
 
 ...
 
-## Best Practices
+### ident
 
 ...
+
+#### Function Signature
+
+```typescript
+
+```
+
+#### Example Usage
+
+```typescript
+
+```
+
+### literal
+
+...
+
+#### Function Signature
+
+```typescript
+
+```
+
+#### Example Usage
+
+```typescript
+
+```
+
+## Best Practices
+
+...probably some shit about how to form SQL queries, what to assume about the datasets, assume they're large, to always prioritize efficiency over everything else, etc...then think of some other things (maybe not even sql query related to talk about)
