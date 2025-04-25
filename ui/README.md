@@ -379,7 +379,9 @@ export const App = () => {
   // ...other stateful variables ...
 
   const source = 'pg_prod';
-  const query = `SELECT * FROM ${schemaName}.${ident(tableName)} WHERE age = ${literal(ageFilter)}`;
+  const query = `SELECT * FROM ${ident(schemaName)}.${ident(tableName)} WHERE age = ${literal(
+    ageFilter
+  )}`;
 
   // ... more component logic ...
 
