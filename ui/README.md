@@ -10,7 +10,7 @@ The following Tools implement common operations—exposed as RPCs—that can be 
 
 ### select
 
-The `select` Tool executes a read-only SQL query and returns the results with metadata about the underlying data sources.
+The `select` Tool executes a read-only SQL query against a Postgres Data Source, returning the results with metadata about the underlying data sources.
 
 #### Function Signature
 
@@ -130,14 +130,14 @@ type Source = {
 
 #### Example Usage
 
-Here's a basic example of using the `select` Tool to perform a simple query on a Postgres table named `customers`:
+Here's a basic example of using the `select` Tool to perform a simple query on a Postgres table named `users`:
 
 ```javascript
 import { select } from 'surface.ui/postgres';
 
 async function main() {
   const { rows, columns, sources } = await select(
-    { query: `select * from "public"."customers"` },
+    { query: `select * from "public"."users"` },
     { source: 'pg_prod' }
   );
 
@@ -155,7 +155,35 @@ As demonstrated in the example above, not only does the `select` Tool return the
 
 ## Hooks
 
-...
+The following React hooks serve as wrapper functions that abstract away the complexity of using Postgres Tools directly, providing a more React-friendly interface. They make it easier to integrate Postgres operations into React components by handling state management, data fetching, and lifecycle events in a way that follows React conventions and best practices.
+
+### useSelect
+
+The `useSelect` Hook builds upon the `select` Tool, providing a simplified, React-friendly interface for executing read-only SQL queries against a Postgres Data Source.
+
+#### Function Signature
+
+```typescript
+/**
+ * @param source - The name of the Postgres Data Source to query.
+ * @param query - The SQL query to execute.
+ * @returns The results of the query containing rows, columns, and sources.
+ */
+const useSelect = (source: string, query: string): SelectToolOutput;
+```
+
+Note that the `useSelect` Hook returns a `SelectToolOutput` type—identical to the output of the `select` Tool.
+
+#### Example Usage
+
+```jsx
+import { useSelect } from 'surface.ui/postgres';
+
+export const SomeComponent = (props: { source: string, query: string }) => {
+  const { rows, columns, sources } = useSelect(props.source, props.query);
+  // ...
+};
+```
 
 ## Components
 
