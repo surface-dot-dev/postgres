@@ -1,6 +1,6 @@
 # Surface Postgres
 
-The "@surface.ui/postgres" integration library is a collection of Tools, Hooks, and specialized Components that enable developers to quickly create data-driven Surface Apps that interface directly with Postgres databases while maintaining consistent UI patterns and security best practices. It offers ready-to-use Components for common data operations and visualizations, powerful Hooks for custom data fetching, and low-level Tools for complex query building.
+The `@surface.ui/postgres` integration library is a collection of Tools, Hooks, and specialized Components that enable developers to quickly create data-driven Surface Apps that interface directly with Postgres databases while maintaining consistent UI patterns and security best practices. It offers ready-to-use Components for common data operations and visualizations, powerful Hooks for custom data fetching, and low-level Tools for complex query building.
 
 First, we'll examine each of these building blocks in detail, organized by Surface concept: Tools, Hooks, and Components. Then, we'll detail each of the library's complementary helper functions. Finally, we'll discuss more general best practices to implement when using this library.
 
@@ -130,7 +130,7 @@ type Source = {
 
 #### Example Usage
 
-Here's a basic example of using the `select` Tool to perform a simple query on a Postgres table named "customers":
+Here's a basic example of using the `select` Tool to perform a simple query on a Postgres table named `customers`:
 
 ```javascript
 import { select } from 'surface.ui/postgres';
@@ -140,6 +140,7 @@ async function main() {
     { query: `select * from "public"."customers"` },
     { source: 'pg_prod' }
   );
+
   console.log(
     `Query returned ${rows.length} rows 
     and sourced data from ${columns.length} columns 
@@ -150,7 +151,7 @@ async function main() {
 main();
 ```
 
-As demonstrated in the example above, not only does the `select` Tool return the resulting rows for a given query, it also returns information about the underlying columns and tables that were used to source the query.
+As demonstrated in the example above, not only does the `select` Tool return the resulting rows for a query, it also returns information about the underlying columns and tables that were used to source that query.
 
 ## Hooks
 
