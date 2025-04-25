@@ -179,7 +179,7 @@ Note that the `useSelect` Hook returns a `SelectToolOutput` type—identical to 
 ```jsx
 import { useSelect } from 'surface.ui/postgres';
 
-export const SomeComponent = (props: { source: string, query: string }) => {
+const SomeComponent = (props: { source: string, query: string }) => {
   const { rows, columns, sources } = useSelect(props.source, props.query);
   // ...
 };
