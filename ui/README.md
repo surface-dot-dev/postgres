@@ -341,7 +341,7 @@ type PostgresDataTableDataCellType = {
 };
 ```
 
-#### Example — Basic Query Results View
+#### Example — Basic Query
 
 ```jsx
 import React from "react";
@@ -366,7 +366,7 @@ export const App = () => {
 
 In the above example, a Surface App uses the `PostgresDataTable` Component to display the 50 most recent records from a Postgres table named "users". The Component runs in "query" mode, which requires two parameters: the query to execute and the target Data Source. By internally combining `DataTable` with `useSelect`, the `PostgresDataTable` Component can dynamically fetch and display the query results in a polished, virtualized React table.
 
-#### Example — Query with Variables
+#### Example — Dynamic Queries
 
 For dynamically constructed queries, this Library provides two helper functions—`ident` and `literal`—which properly escape values to prevent SQL injection attacks. Here's a basic example:
 
