@@ -345,7 +345,7 @@ type PostgresDataTableDataCellType = {
 
 ```jsx
 import React from "react";
-import { View, Main, PostgresDataTable } from "@surface.dev/ui";
+import { View, Main, PostgresDataTable } from "@surface.ui/postgres";
 
 export const App = () => {
   const source = "pg_prod";
@@ -372,7 +372,7 @@ For dynamically constructed queries, this Library provides two helper functionsâ
 
 ```jsx
 import React, { useState } from "react";
-import { View, Main, PostgresDataTable, ident, literal } from "@surface.dev/ui";
+import { View, Main, PostgresDataTable, ident, literal } from "@surface.ui/postgres";
 
 export const App = () => {
   const [schemaName, setSchemaName] = useState("public");
@@ -425,7 +425,7 @@ function ident(value: string): string;
 #### Example Usage
 
 ```typescript
-import { ident } from "@surface.dev/ui";
+import { ident } from "@surface.ui/postgres";
 
 // Safely construct a query with dynamic table/column names
 const tableName = "users";
@@ -452,7 +452,7 @@ function literal(value: string | number | boolean | null | Date): string;
 #### Example Usage
 
 ```typescript
-import { literal } from "@surface.dev/ui";
+import { literal } from "@surface.ui/postgres";
 
 // Safely construct a query with dynamic values
 const age = 25;
