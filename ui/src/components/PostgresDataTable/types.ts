@@ -1,7 +1,12 @@
 import { DataTableColumnType, DataTableRowType } from '@surface.dev/ui';
 
 /** Defines the structure of a column in a Postgres data table */
-export type PostgresDataTableColumnType = DataTableColumnType;
+export type PostgresDataTableColumnType = DataTableColumnType & {
+  /**
+   * The Postgres data type of the column (required)
+   */
+  type: string;
+};
 
 /**
  * Represents a single row of data in the table.

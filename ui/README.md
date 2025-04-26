@@ -280,9 +280,9 @@ type PostgresDataTableColumnType = {
   name: string;
 
   /**
-   * The Postgres data type of the column (undefined for computed columns).
+   * The Postgres data type of the column
    */
-  type?: string;
+  type: string;
 };
 
 /**
@@ -349,7 +349,7 @@ import { View, Main, PostgresDataTable } from "@surface.dev/ui";
 
 export const App = () => {
   const source = "pg_prod";
-  const query = `SELECT * FROM "public"."users" ORDER BY "created_at" DESC LIMIT 50`;
+  const query = `SELECT * FROM users ORDER BY created_at DESC LIMIT 50`;
 
   return (
     <View>
@@ -401,70 +401,68 @@ export const App = () => {
 
 In this example, the `PostgresDataTable` Component displays results from a dynamically constructed query built using the `ident` and `literal` helper functions. These functions are essential when incorporating user-provided or dynamic values into SQL queries. They ensure proper escaping of identifiers and literals to prevent SQL injection attacks while keeping queries flexible. This approach works especially well for interactive Apps where users need to filter or customize their data views.
 
-For more details about these helper functions, see the "Helpers" section later in this documentation.
-
-### PostgresColumnName
-
-...desc
-
-#### Props
-
-```typescript
-...
-```
-
-#### Example Usage
-
-...
-
-### PostgresColumnValue
-
-...desc
-
-#### Props
-
-```typescript
-...
-```
-
-#### Example Usage
-
-...
+For more details about these helper functions, see the "Helpers" section below.
 
 ## Helpers
 
-...
+This library provides several helper functions that enhance its core functionality and integrate seamlessly with its primary building blocks.
 
 ### ident
 
-...
+The `ident` helper function safely escapes PostgreSQL identifiers (like table names, column names, etc.) to prevent SQL injection attacks while maintaining query flexibility.
 
 #### Function Signature
 
 ```typescript
-
+/**
+ * Safely escapes a PostgreSQL identifier
+ * @param value - The identifier to escape
+ * @returns A safely escaped identifier string
+ */
+function ident(value: string): string;
 ```
 
 #### Example Usage
 
 ```typescript
+import { ident } from "@surface.dev/ui";
 
+// Safely construct a query with dynamic table/column names
+const tableName = "users";
+const columnName = "email";
+const query = `SELECT ${ident(columnName)} FROM ${ident(tableName)}`;
+// Result: SELECT "email" FROM "users"
 ```
 
 ### literal
 
-...
+The `literal` helper function safely escapes literal values in PostgreSQL queries to prevent SQL injection attacks while supporting dynamic query parameters.
 
 #### Function Signature
 
 ```typescript
-
+/**
+ * Safely escapes a PostgreSQL literal value
+ * @param value - The value to escape (supports various types)
+ * @returns A safely escaped literal string
+ */
+function literal(value: string | number | boolean | null | Date): string;
 ```
 
 #### Example Usage
 
 ```typescript
+import { literal } from "@surface.dev/ui";
 
+// Safely construct a query with dynamic values
+const age = 25;
+const status = "active";
+const query = `
+  SELECT * FROM users 
+  WHERE age > ${literal(age)} 
+  AND status = ${literal(status)}
+`;
+// Result: SELECT * FROM users WHERE age > 25 AND status = 'active'
 ```
 
 ## Best Practices
