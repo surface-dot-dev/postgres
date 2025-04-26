@@ -467,4 +467,18 @@ const query = `
 
 ## Best Practices
 
-...probably some shit about how to form SQL queries, what to assume about the datasets, assume they're large, to always prioritize efficiency over everything else, etc...then think of some other things (maybe not even sql query related to talk about)
+When developing Apps using the `@surface.ui/postgres` library, following these best practices ensures secure, maintainable, and efficient database interactions:
+
+- Always use the `literal()` and `ident()` helper functions when constructing dynamic queries to ensure proper SQL injection protection and maintain query flexibility.
+
+- When referencing database objects in the 'public' schema, the schema name can be omitted. However, explicitly include the schema name when working with objects in non-public schemas for clarity and precision.
+
+- Computed columns are fully supported and can be effectively used to transform or aggregate data within your queries.
+
+- Complex queries involving table joins are supported and encouraged when necessary to retrieve related data efficiently.
+
+- Maintain consistency by using snake_case naming conventions for all custom identifiers, including aliases, computed columns, and user-defined functions.
+
+- When multiple query approaches are possible, prioritize the most performant solution by considering factors such as index usage, join efficiency, and result set size.
+
+- Avoid explicit type casting unless specifically required for data type compatibility, as unnecessary casts can impact both query performance and readability.
