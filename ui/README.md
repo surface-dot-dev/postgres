@@ -341,7 +341,7 @@ type PostgresDataTableDataCellType = {
 };
 ```
 
-#### Example — Basic Query
+#### Example — Basic Query Results View
 
 ```jsx
 import React from "react";
