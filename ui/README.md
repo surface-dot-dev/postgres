@@ -2,7 +2,7 @@
 
 The `@surface.ui/postgres` integration library is a collection of Tools, Hooks, and specialized Components that enable developers to quickly create data-driven Surface Apps that interface directly with Postgres databases while maintaining consistent UI patterns and security best practices. It offers ready-to-use Components for common data operations and visualizations, powerful Hooks for custom data fetching, and low-level Tools for complex query building.
 
-First, we'll examine each of these building blocks in detail, organized by Surface concept: Tools, Hooks, and Components. Then, we'll detail each of the library's complementary helper functions. Finally, we'll discuss general best practices to implement when using this library.
+First, we'll examine each of these building blocks in detail, organized by Surface concept: Tools, Hooks, and Components. Then, we'll outline each of the library's complementary helper functions. Finally, we'll discuss general best practices to implement when using this library.
 
 ## Tools
 
