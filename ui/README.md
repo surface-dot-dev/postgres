@@ -137,8 +137,8 @@ import { select } from "surface.ui/postgres";
 
 async function main() {
   const { rows, columns, sources } = await select(
-    { query: `select * from "public"."users"` },
-    { source: "pg_prod" } // name of Data Source in stack
+    { query: "select * from users" },
+    { source: "pg_prod" } // name of Data Source in the stack
   );
 
   console.log(
@@ -187,7 +187,7 @@ const SomeComponent = (props: { source: string, query: string }) => {
 
 ## Components
 
-The following Components are specialized UI elements that source and display data from Postgres databases. These ready-to-use components integrate directly with Postgres databases while abstracting away the complexity of data operations and maintaining consistent patterns and best practices for data visualization and manipulation.
+The following Components are specialized UI elements that source and display data from Postgres databases. These ready-to-use Components integrate directly with Postgres databases while abstracting away the complexity of data operations and maintaining consistent patterns and best practices for data visualization and manipulation.
 
 ### PostgresDataTable
 
