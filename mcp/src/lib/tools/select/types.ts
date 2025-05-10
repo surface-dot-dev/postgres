@@ -13,6 +13,9 @@ export const SELECT_TOOL_NAME = 'select';
 // ============================
 
 export type SelectToolInput = {
+  /**
+   * The SQL query to execute.
+   */
   query: string;
 };
 
@@ -24,29 +27,92 @@ export const SelectToolInputSchema = z.object({
 //  Select | Output
 // ============================
 
+export type SelectToolOutput = {
+  /**
+   * Array of result rows from the executed SQL query, where each row is a
+   * key-value record
+   */
+  rows: Record<string, any>[];
+
+  /**
+   * Metadata about the columns returned in the query result, including their
+   * source tables when available
+   */
+  columns: SourceColumn[];
+
+  /**
+   * Metadata about all unique tables that were sourced by the query
+   */
+  sources: Source[];
+};
+
 export type SourceColumn = {
+  /**
+   * The name of the column as it appears in the query result
+   */
   name: string;
+
+  /**
+   * The PostgreSQL data type of the column (undefined for computed columns)
+   */
   type?: string;
+
+  /**
+   * Whether the column allows NULL values (undefined for computed columns)
+   */
   nullable?: boolean;
+
+  /**
+   * The default value for the column if specified (undefined for computed columns)
+   */
   default?: string | null;
+
+  /**
+   * Any comments associated with the column in the database (undefined for computed columns)
+   */
   comment?: string | null;
+
+  /**
+   * The Postgres oid of the table that this column belongs to (undefined for computed columns)
+   */
   sourceId?: number;
 };
 
 export type Source = {
+  /**
+   * The Postgres oid of the source table.
+   */
   id: number;
-  schema: string;
-  name: string;
-  comment: string | null;
-  primaryKey: PrimaryKey;
-  outgoingForeignKeyConstraints: ForeignKeyConstraint[];
-  incomingForeignKeyReferences: ForeignKeyConstraint[];
-};
 
-export type SelectToolOutput = {
-  rows: Record<string, any>[];
-  columns: SourceColumn[];
-  sources: Source[];
+  /**
+   * The name of the schema containing this source table
+   */
+  schema: string;
+
+  /**
+   * The name of the source table
+   */
+  name: string;
+
+  /**
+   * The comment on the source table
+   */
+  comment: string | null;
+
+  /**
+   * The primary key of the source table
+   */
+  primaryKey: PrimaryKey;
+
+  /**
+   * The outgoing foreign key constraints originating from this table (source).
+   */
+  outgoingForeignKeyConstraints: ForeignKeyConstraint[];
+
+  /**
+   * The incoming foreign key references that point to this table (target).
+   */
+  incomingForeignKeyReferences: ForeignKeyConstraint[];
 };
 
 export const SelectToolOutputSchema = z.object({

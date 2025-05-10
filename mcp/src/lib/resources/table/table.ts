@@ -16,7 +16,7 @@ import {
 } from '../../postgres/sql/types';
 
 // ============================
-//  Table | Resource
+//  Table | Resource Type
 // ============================
 
 export const table: ResourceType = {

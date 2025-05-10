@@ -7,6 +7,12 @@ import { getCachedTable } from '../../resources/cache';
 //  Select | Call
 // ============================
 
+/**
+ * Executes a read-only SQL query and returns the results with metadata about the
+ * underlying data sources.
+ *
+ * @param query - The SQL query to execute.
+ */
 export async function select({ query }: SelectToolInput): Promise<SelectToolOutput> {
   const { rows, fields } = await performReadQuery(query);
   const { columns, sources } = getUnderlyingDataSources(fields);
@@ -25,6 +31,7 @@ function getUnderlyingDataSources(fields: FieldDef[]): {
 
     // Computed columns.
     if (!field.tableID || !field.columnID) {
+      column.type = 'computed';
       columns.push(column);
       continue;
     }

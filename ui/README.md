@@ -133,7 +133,7 @@ type Source = {
 Here's a basic example of using the `select` Tool to perform a simple query on a Postgres table named `users`:
 
 ```javascript
-import { select } from "surface.ui/postgres";
+import { select } from "@surface.ui/postgres";
 
 async function main() {
   const { rows, columns, sources } = await select(
@@ -177,7 +177,7 @@ Note that the `useSelect` Hook returns a `SelectToolOutput` typeâ€”identical to 
 #### Example Usage
 
 ```jsx
-import { useSelect } from "surface.ui/postgres";
+import { useSelect } from "@surface.ui/postgres";
 
 const SomeComponent = (props: { source: string, query: string }) => {
   const { rows, columns, sources } = useSelect(props.source, props.query);
@@ -345,7 +345,8 @@ type PostgresDataTableDataCellType = {
 
 ```jsx
 import React from "react";
-import { View, Main, PostgresDataTable } from "@surface.ui/postgres";
+import { View, Main } from "@surface.dev/ui";
+import { PostgresDataTable } from "@surface.ui/postgres";
 
 export const App = () => {
   const source = "pg_prod";
@@ -372,7 +373,8 @@ For dynamically constructed queries, this Library provides two helper functionsâ
 
 ```jsx
 import React, { useState } from "react";
-import { View, Main, PostgresDataTable, ident, literal } from "@surface.ui/postgres";
+import { View, Main } from "@surface.dev/ui";
+import { PostgresDataTable, ident, literal } from "@surface.ui/postgres";
 
 export const App = () => {
   const [schemaName, setSchemaName] = useState("public");

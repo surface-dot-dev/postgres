@@ -6,7 +6,7 @@ import { TableType } from '../../postgres/sql/types';
 import { toResourceUri } from '../uri';
 
 // ============================
-//  View | Resource
+//  View | Resource Type
 // ============================
 
 export const view: ResourceType = {
