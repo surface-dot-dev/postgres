@@ -1,6 +1,6 @@
 {
   "name": "@surface.mcp/postgres",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Postgres MCP Server",
   "keywords": [
     "javascript",
