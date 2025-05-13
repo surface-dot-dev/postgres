@@ -1,6 +1,6 @@
 {
   "name": "@surface.mcp/postgres",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Postgres MCP Server",
   "keywords": [
     "javascript",
@@ -42,7 +42,7 @@
     }
   },
   "dependencies": {
-    "@surface.dev/mcp": "^0.0.7",
+    "@surface.dev/mcp": "^0.0.8",
     "@surface.dev/utils": "^0.0.6",
     "pg": "^8.14.1",
     "pg-format": "^1.0.4",
