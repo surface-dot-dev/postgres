@@ -6,7 +6,6 @@ import config from '../config';
 
 const pool = new Pool({
   connectionString: config.DATABASE_URL,
-  min: config.MIN_POOL_SIZE,
   max: config.MAX_POOL_SIZE,
   connectionTimeoutMillis: config.CONNECTION_TIMEOUT,
   statement_timeout: config.STATEMENT_TIMEOUT,
