@@ -1,6 +1,6 @@
 {
   "name": "@surface.ui/postgres",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Postgres UI Components",
   "keywords": [
     "javascript",
@@ -17,11 +17,18 @@
   "license": "MIT",
   "author": "Surface (https://surface.dev)",
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/cjs/index.js",
+      "import": "./dist/esm/index.js",
+      "types": "./dist/esm/index.d.ts"
+    }
+  },
   "sideEffects": false,
   "repository": "surface-dot-dev/postgres",
   "scripts": {
@@ -29,7 +36,8 @@
     "clean": "rimraf dist",
     "format": "prettier --write \"{src,test}/**/*.{ts,tsx}\"",
     "build": "run-s clean format build:*",
-    "build:main": "tsc -p tsconfig.json",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:esm": "tsc -p tsconfig.esm.json",
     "types-generate": "dts-gen -m '@surface.ui/postgres' -s"
   },
   "husky": {
